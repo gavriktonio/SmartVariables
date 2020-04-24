@@ -3,16 +3,16 @@
   "displayName": "Smart Variables",
   "version": "0.6.0",
   "description": "Smart variables package based on Scriptable objects. Useful for UI and modular inter-component bindings.",
-  "unity": "2019.3"
+  "unity": "2019.3",
   "samples": [
         {
             "displayName": "Smart Variable Example",
             "description": "Simple sample showing how to use smart variables",
             "path": "Samples~/Increment"
         }
-    ]
+    ],
   "repository": {
         "type": "git",
         "url": "https://github.com/gavriktonio/SmartVariables"
-    },
+    }
 }
