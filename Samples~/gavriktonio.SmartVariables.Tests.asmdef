@@ -1,0 +1,19 @@
+{
+    "name": "gavriktonio.smartvariables.tests",
+    "references": [
+        "GUID:37427aef1b413064fab40c49672d6dca",
+        "GUID:313d4974ef1138e43accbfc9d89c711a",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        ""
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

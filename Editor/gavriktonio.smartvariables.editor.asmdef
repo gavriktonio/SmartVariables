@@ -1,0 +1,15 @@
+{
+    "name": "gavriktonio.smartvariables.editor",
+    "references": [
+        "GUID:37427aef1b413064fab40c49672d6dca"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
