@@ -9,10 +9,6 @@ public class SmartLocalCollection : MonoBehaviour
     private int copyInstanceID;
 
     public List<SmartReferenceBase> variables = new List<SmartReferenceBase>();
-    public SmartLocalCollection(SmartLocalCollection other)
-    {
-        this.variables = new List<SmartReferenceBase>();
-    }
 
     public void AddToCollection(SmartReferenceBase variable)
     {
