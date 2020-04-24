@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class SmartLocalCollectionWindow : EditorWindow
 {
-    string myString = "Hello World";
-    bool groupEnabled;
-    bool myBool = true;
-    float myFloat = 1.23f;
-
     // Add menu item named "My Window" to the Window menu
     [MenuItem("Window/Smart Variables Local Collections")]
     public static void ShowWindow()
