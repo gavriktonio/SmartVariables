@@ -1066,7 +1066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c6ac7b05c9f334094d5cb6f824de1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variable: {fileID: 959112032}
+  variable: {fileID: 2011102301}
 --- !u!114 &266251893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2299,6 +2299,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &477239526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
+  m_Name: Speed
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 0
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
 --- !u!1 &499344254
 GameObject:
   m_ObjectHideFlags: 0
@@ -3313,9 +3331,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   variables:
-  - {fileID: 947467117}
-  - {fileID: 1433340468}
-  - {fileID: 959112032}
+  - {fileID: 1673208582}
+  - {fileID: 477239526}
+  - {fileID: 2011102301}
 --- !u!114 &712037316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3330,15 +3348,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIncrementing:
     type: 1
-    reference: {fileID: 947467117}
+    reference: {fileID: 1673208582}
     runtimeValue: 0
   incrementFloat:
     type: 1
-    reference: {fileID: 959112032}
+    reference: {fileID: 2011102301}
     runtimeValue: 0
   incrementSpeed:
     type: 1
-    reference: {fileID: 1433340468}
+    reference: {fileID: 477239526}
     runtimeValue: 1
 --- !u!1 &721840796
 GameObject:
@@ -4364,42 +4382,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 920755142}
   m_CullTransparentMesh: 0
---- !u!114 &947467117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f8538a03e67df4ea10149fde2fb6f6, type: 3}
-  m_Name: IsIncrementing
-  m_EditorClassIdentifier: 
-  debugLog: 0
-  persistent: 0
-  variableSaver: {fileID: 0}
-  forceCallbacks: 0
-  initialValue: 0
-  runtimeValue: 0
---- !u!114 &959112032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
-  m_Name: Increment
-  m_EditorClassIdentifier: 
-  debugLog: 0
-  persistent: 0
-  variableSaver: {fileID: 0}
-  forceCallbacks: 0
-  initialValue: 0
-  runtimeValue: 0
 --- !u!1 &1010094108
 GameObject:
   m_ObjectHideFlags: 0
@@ -5026,7 +5008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c66e7a944d9a874f86a281863fdac5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatVariable: {fileID: 1433340468}
+  floatVariable: {fileID: 477239526}
 --- !u!114 &1130894932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5866,24 +5848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b9489b015fa614896fc1cbf6dcff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1433340468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
-  m_Name: Speed
-  m_EditorClassIdentifier: 
-  debugLog: 0
-  persistent: 0
-  variableSaver: {fileID: 0}
-  forceCallbacks: 0
-  initialValue: 0
-  runtimeValue: 0
 --- !u!1 &1462849914
 GameObject:
   m_ObjectHideFlags: 0
@@ -6540,7 +6504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 148e3acb7662cf147990ab20f818860b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boolean: {fileID: 947467117}
+  boolean: {fileID: 1673208582}
 --- !u!114 &1637329432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6588,6 +6552,24 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &1673208582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f8538a03e67df4ea10149fde2fb6f6, type: 3}
+  m_Name: IsIncrementing
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 0
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
 --- !u!1 &1705185570
 GameObject:
   m_ObjectHideFlags: 0
@@ -7289,7 +7271,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1853002376
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7408,7 +7390,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1853002378}
-    characterCount: 67
+    characterCount: 66
     spriteCount: 0
     spaceCount: 9
     wordCount: 10
@@ -7439,6 +7421,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1853002375}
   m_CullTransparentMesh: 0
+--- !u!114 &2011102301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
+  m_Name: Increment
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 0
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
 --- !u!1 &2049342339
 GameObject:
   m_ObjectHideFlags: 0
