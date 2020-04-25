@@ -20,5 +20,9 @@ public class DependencyInputSystem : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+        else
+        {
+            gameObject.SetActive(true);
+        }
     }
 }
