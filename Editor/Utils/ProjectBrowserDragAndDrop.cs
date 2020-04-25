@@ -63,7 +63,6 @@ class ProjectBrowserDragAndDrop
 
         if (returnMode == DragAndDropVisualMode.None)
         {
-            Debug.LogWarning("default drag and drop");
             return (DragAndDropVisualMode)defaultDragDropMethod.Invoke(null, new object[] { dragUponInstanceId, dummy, perform });
         }
 

@@ -1,5 +1,5 @@
 {
-    "name": "gavriktonio.smartvariables.tests",
+    "name": "gavriktonio.smartvariables.samples",
     "references": [
         "GUID:37427aef1b413064fab40c49672d6dca",
         "GUID:313d4974ef1138e43accbfc9d89c711a",
@@ -14,6 +14,12 @@
     ],
     "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0-preview.1",
+            "define": "SV_SAMPLES_INPUT_SYSTEM"
+        }
+    ],
     "noEngineReferences": false
 }

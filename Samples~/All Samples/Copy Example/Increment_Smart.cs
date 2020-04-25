@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SV_Test_IncrementFloat : MonoBehaviour
+public class Increment_Smart : MonoBehaviour
 {
     public SmartBool isIncrementing;
     public SmartFloat incrementFloat;

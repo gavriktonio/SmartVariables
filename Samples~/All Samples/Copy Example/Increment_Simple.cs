@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class DumDumIncrement : MonoBehaviour
+public class Increment_Simple : MonoBehaviour
 {
     public float incrementingFloat;
     public float incrementingSpeed;

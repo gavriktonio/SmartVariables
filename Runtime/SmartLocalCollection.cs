@@ -44,13 +44,14 @@ public class SmartLocalCollection : MonoBehaviour
 
         components.AddRange(GetComponentsInChildren<Component>());
         components.RemoveAll(x =>
-        x.GetType() == typeof(Transform) ||
-        x.GetType() == typeof(DecoupleReferences)
+        x.GetType() != null &&
+        (x.GetType() == typeof(Transform) ||
+         x.GetType() == typeof(DecoupleReferences))
         );
 
         for (int i = 0; i < variables.Count; i++)
         {
-            variables[i] = DeepCopy(variables[i] , components);
+            variables[i] = DeepCopy(variables[i], components);
         }
         copyInstanceID = GetInstanceID();
     }

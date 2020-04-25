@@ -1066,7 +1066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c6ac7b05c9f334094d5cb6f824de1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variable: {fileID: 1829556325}
+  variable: {fileID: 959112032}
 --- !u!114 &266251893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1966,6 +1966,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 2049342340}
+  - {fileID: 1853002376}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3273,7 +3274,7 @@ GameObject:
   - component: {fileID: 712037316}
   - component: {fileID: 712037315}
   m_Layer: 0
-  m_Name: LocalVarsIncrementingTest
+  m_Name: Increment_LocalCollection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3312,9 +3313,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   variables:
-  - {fileID: 1026120419}
-  - {fileID: 1603233109}
-  - {fileID: 1829556325}
+  - {fileID: 947467117}
+  - {fileID: 1433340468}
+  - {fileID: 959112032}
 --- !u!114 &712037316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3329,15 +3330,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isIncrementing:
     type: 1
-    reference: {fileID: 1026120419}
+    reference: {fileID: 947467117}
     runtimeValue: 0
   incrementFloat:
     type: 1
-    reference: {fileID: 1829556325}
+    reference: {fileID: 959112032}
     runtimeValue: 0
   incrementSpeed:
     type: 1
-    reference: {fileID: 1603233109}
+    reference: {fileID: 1433340468}
     runtimeValue: 1
 --- !u!1 &721840796
 GameObject:
@@ -4363,6 +4364,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 920755142}
   m_CullTransparentMesh: 0
+--- !u!114 &947467117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f8538a03e67df4ea10149fde2fb6f6, type: 3}
+  m_Name: IsIncrementing
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 0
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
+--- !u!114 &959112032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
+  m_Name: Increment
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 0
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
 --- !u!1 &1010094108
 GameObject:
   m_ObjectHideFlags: 0
@@ -4746,24 +4783,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1016607617}
   m_CullTransparentMesh: 0
---- !u!114 &1026120419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f8538a03e67df4ea10149fde2fb6f6, type: 3}
-  m_Name: IsIncrementing
-  m_EditorClassIdentifier: 
-  debugLog: 0
-  persistent: 0
-  variableSaver: {fileID: 0}
-  forceCallbacks: 0
-  initialValue: 0
-  runtimeValue: 0
 --- !u!1 &1039503180
 GameObject:
   m_ObjectHideFlags: 0
@@ -5007,7 +5026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c66e7a944d9a874f86a281863fdac5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatVariable: {fileID: 1603233109}
+  floatVariable: {fileID: 1433340468}
 --- !u!114 &1130894932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5443,7 +5462,7 @@ GameObject:
   - component: {fileID: 1228762239}
   - component: {fileID: 1228762238}
   m_Layer: 0
-  m_Name: GlobalVarsIncrementingTest
+  m_Name: Increment_AssetsCollection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5847,6 +5866,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b9489b015fa614896fc1cbf6dcff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1433340468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
+  m_Name: Speed
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 0
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
 --- !u!1 &1462849914
 GameObject:
   m_ObjectHideFlags: 0
@@ -6296,24 +6333,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588560272}
   m_CullTransparentMesh: 0
---- !u!114 &1603233109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
-  m_Name: Speed
-  m_EditorClassIdentifier: 
-  debugLog: 0
-  persistent: 0
-  variableSaver: {fileID: 0}
-  forceCallbacks: 0
-  initialValue: 0
-  runtimeValue: 0
 --- !u!1 &1620481185
 GameObject:
   m_ObjectHideFlags: 0
@@ -6521,7 +6540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 148e3acb7662cf147990ab20f818860b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boolean: {fileID: 1026120419}
+  boolean: {fileID: 947467117}
 --- !u!114 &1637329432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6951,24 +6970,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b9489b015fa614896fc1cbf6dcff0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1829556325
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
-  m_Name: Increment
-  m_EditorClassIdentifier: 
-  debugLog: 0
-  persistent: 0
-  variableSaver: {fileID: 0}
-  forceCallbacks: 0
-  initialValue: 0
-  runtimeValue: 0
 --- !u!1 &1830879325
 GameObject:
   m_ObjectHideFlags: 0
@@ -7270,6 +7271,174 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852457069}
   m_CullTransparentMesh: 0
+--- !u!1 &1853002375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1853002376}
+  - component: {fileID: 1853002379}
+  - component: {fileID: 1853002378}
+  - component: {fileID: 1853002377}
+  m_Layer: 5
+  m_Name: Input package check
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1853002376
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853002375}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 407861933}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 30}
+  m_SizeDelta: {x: 1500, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1853002377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853002375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb8be231fc90d2409162735a957b4e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1853002378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853002375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: This sample requires Unity Input package. Import and restart Unity
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_outlineColor:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_textAlignment: 514
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_firstOverflowCharacterIndex: -1
+  m_linkedTextComponent: {fileID: 0}
+  m_isLinkedTextComponent: 0
+  m_isTextTruncated: 0
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_ignoreRectMaskCulling: 0
+  m_ignoreCulling: 1
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
+  m_firstVisibleCharacter: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_textInfo:
+    textComponent: {fileID: 1853002378}
+    characterCount: 67
+    spriteCount: 0
+    spaceCount: 9
+    wordCount: 10
+    linkCount: 0
+    lineCount: 1
+    pageCount: 1
+    materialCount: 1
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_spriteAnimator: {fileID: 0}
+  m_hasFontAssetChanged: 0
+  m_subTextObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1853002379
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853002375}
+  m_CullTransparentMesh: 0
 --- !u!1 &2049342339
 GameObject:
   m_ObjectHideFlags: 0
@@ -7520,7 +7689,7 @@ GameObject:
   - component: {fileID: 2115474976}
   - component: {fileID: 2115474977}
   m_Layer: 0
-  m_Name: DumDumIncrementingTest
+  m_Name: Increment_Simple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
