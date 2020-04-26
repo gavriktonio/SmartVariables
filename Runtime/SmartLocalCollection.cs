@@ -12,6 +12,7 @@ public class SmartLocalCollection : MonoBehaviour
 
     public void AddToCollection(SmartReferenceBase variable)
     {
+#if UNITY_EDITOR
         string oldPath = AssetDatabase.GetAssetPath(variable);
         variables.Add(variable);
         AssetDatabase.RemoveObjectFromAsset(variable);
@@ -20,6 +21,7 @@ public class SmartLocalCollection : MonoBehaviour
             AssetDatabase.DeleteAsset(oldPath);
         }
         AssetDatabase.SaveAssets();
+#endif
     }
 
     private void Awake()

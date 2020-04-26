@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 [System.Serializable]
 [CreateAssetMenu(menuName = "SmartVariables/VariableSaver")]
 public class SmartVariableSaver : ScriptableObject
@@ -30,14 +31,11 @@ public class SmartVariableSaver : ScriptableObject
 
     public void AddVariableToSaveQueue(SmartReferenceBase variable)
     {
-#if !UNITY_EDITOR
         queuedVariablesToSave.Add(variable);
-#endif
     }
 
     public void SaveQueuedVariables()
     {
-#if !UNITY_EDITOR
         if (!loaded)
         {
             LoadVariables();
@@ -74,7 +72,6 @@ public class SmartVariableSaver : ScriptableObject
         }
 
         file.Close();
-#endif
     }
 
     private void LoadVariables()
