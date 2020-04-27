@@ -3,6 +3,14 @@ using UnityEngine;
 
 public abstract class SmartReferenceBase : ScriptableObject
 {
+	[Tooltip("Log all the changes, happening to this variable")]
+	public bool debugLog = false;
+	[Tooltip("If true, the runtime value will persist between play sessions")]
+	public bool persistent = false;
+	public SmartVariableSaver variableSaver;
+	[Tooltip("If true, callbacks will be triggered even if the variable is set to the same value as before")]
+	public bool forceCallbacks = false;
+
 	abstract public void PrepareEditorCallbacks();
 	abstract public void InvokeEditorCallbacks();
 	abstract public string ValueAsString();
@@ -15,14 +23,6 @@ public abstract class SmartReferenceBase : ScriptableObject
 [System.Serializable]
 public class SmartReference<T> : SmartReferenceBase, ISerializationCallbackReceiver
 {
-	[Tooltip("Log all the changes, happening to this variable")]
-	public bool debugLog = false;
-	[Tooltip("If true, the runtime value will persist between play sessions")]
-	public bool persistent = false;
-    public SmartVariableSaver variableSaver;
-	[Tooltip("If true, callbacks will be triggered even if the variable is set to the same value as before")]
-	public bool forceCallbacks = false;
-
 	[SerializeField]
 	private T initialValue;
 	//Needs to be serialized to be accessible from the inspector

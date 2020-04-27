@@ -7,6 +7,7 @@ using UnityEngine;
 //
 //Needs to run before other components, that use these references. Make sure to set
 //it to go early in the script execution order
+[System.Obsolete("DecoupleReferences is obsolete. Use local collection instead")]
 public class DecoupleReferences : MonoBehaviour
 {
 	public SmartReferenceBase[] toDecouple;

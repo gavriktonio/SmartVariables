@@ -26,7 +26,7 @@ class ProjectBrowserDragAndDrop
         customDragAndDropHandlers.Remove(dropHandler);
     }
 
-    private static List<ProjectBrowserDropHandler> customDragAndDropHandlers; 
+    private static List<ProjectBrowserDropHandler> customDragAndDropHandlers = new List<ProjectBrowserDropHandler>(); 
 
 
     static FieldInfo draggedOntoId;

@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7638807736662282983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
+  m_Name: Speed
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 1
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
+--- !u!114 &-6942259743384448559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64459795396e02b4c936f7d7a7e625ca, type: 3}
+  m_Name: Increment
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 1
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00a7fda92b3889742bed2bd77e01f296, type: 3}
+  m_Name: EditorPersistence
+  m_EditorClassIdentifier: 
+  variables: []
+--- !u!114 &3203120077126837552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f8538a03e67df4ea10149fde2fb6f6, type: 3}
+  m_Name: IsIncrementing
+  m_EditorClassIdentifier: 
+  debugLog: 0
+  persistent: 1
+  variableSaver: {fileID: 0}
+  forceCallbacks: 0
+  initialValue: 0
+  runtimeValue: 0
