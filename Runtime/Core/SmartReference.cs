@@ -12,7 +12,6 @@ class SmartReferenceResetter
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 	static void OnRuntimeMethodLoad()
 	{
-		Debug.Log("Init");
 		string[] smartReferencesGuids = AssetDatabase.FindAssets("t:" + typeof(SmartReferenceBase).Name);
 		foreach (string guid in smartReferencesGuids)
 		{

@@ -1,7 +1,7 @@
 {
   "name": "com.gavriktonio.smartvariables",
   "displayName": "Smart Variables",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Smart variables package based on Scriptable objects.\nConnect scripts not through code, but by assigning variables, stored outside of scripts.\nStoring variables in assets allows for having globally accessible variables\nA local collection allows to store variables on an instance of an object in case it needs to be duplicated when copied.",
   "unity": "2019.3",
   "samples": [
