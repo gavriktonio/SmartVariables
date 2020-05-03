@@ -82,7 +82,6 @@ public class SubAssetDragAndDrop
                         {
                             AssetDatabase.DeleteAsset(oldPath);
                         }
-
                         OnAssetAddedToCollection.Invoke(collectionToAddTo, new object[] { draggedAsset });
                     }
                     AssetDatabase.SaveAssets();

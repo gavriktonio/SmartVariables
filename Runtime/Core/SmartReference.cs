@@ -1,6 +1,37 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+#if UNITY_EDITOR
+class SmartReferenceResetter
+{
+	//Is here so that enter play mode without domain reloading works
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+	static void OnRuntimeMethodLoad()
+	{
+		Debug.Log("Init");
+		string[] smartReferencesGuids = AssetDatabase.FindAssets("t:" + typeof(SmartReferenceBase).Name);
+		foreach (string guid in smartReferencesGuids)
+		{
+			AssetDatabase.LoadAssetAtPath<SmartReferenceBase>(AssetDatabase.GUIDToAssetPath(guid)).RemoveAllListeners();
+		}
+		string[] smartCollectionsGuids = AssetDatabase.FindAssets("t:" + typeof(SmartCollection).Name);
+		foreach (string guid in smartCollectionsGuids)
+		{
+			SmartCollection collection = AssetDatabase.LoadAssetAtPath<SmartCollection>(AssetDatabase.GUIDToAssetPath(guid));
+			foreach (SmartReferenceBase variable in collection.variables)
+			{
+				variable.RemoveAllListeners();
+			}
+		}
+	}
+}
+#endif
+
+
 public abstract class SmartReferenceBase : ScriptableObject
 {
 	[Tooltip("Log all the changes, happening to this variable")]
@@ -18,6 +49,7 @@ public abstract class SmartReferenceBase : ScriptableObject
 	abstract public void ResetRuntimeValue();
     abstract public object GetValueAsObject();
     abstract public void SetRuntimeValueFromObject(object obj);
+	abstract public void RemoveAllListeners();
 }
 
 [System.Serializable]
@@ -102,6 +134,7 @@ public class SmartReference<T> : SmartReferenceBase, ISerializationCallbackRecei
 			settingInProgress = false;
 		}
 	}
+
 
 	public T Value
 	{
@@ -267,15 +300,31 @@ public class SmartReference<T> : SmartReferenceBase, ISerializationCallbackRecei
 		listeners -= listener;
 	}
 
-	public void RemoveAllListeners()
+	public override void RemoveAllListeners()
 	{
 		if (debugLog)
 		{
 			Debug.Log("SmartReference: " + name + " RemoveAllListeners");
 		}
-		foreach (VariableSetEvent d in listeners.GetInvocationList())
+		if (listeners != null)
 		{
-			listeners -= d;
+			foreach (VariableSetEvent d in listeners.GetInvocationList())
+			{
+				listeners -= d;
+			}
 		}
 	}
+
+	public static implicit operator T(SmartReference<T> smartVar) => smartVar.Value;
+	public static T operator *(T var, SmartReference<T> smartVar)
+	{
+		dynamic x = var, y = smartVar.Value;
+		return x * y;
+	}
+	public static T operator +(T var, SmartReference<T> smartVar)
+	{
+		dynamic x = var, y = smartVar.Value;
+		return x + y;
+	}
+
 }

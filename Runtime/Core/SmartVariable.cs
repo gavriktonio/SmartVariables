@@ -97,4 +97,16 @@ public class SmartVariable<T, VARIABLET> : SmartVariableBase where VARIABLET : S
 			}
 		}
 	}
+
+	public static implicit operator T(SmartVariable<T, VARIABLET> var) => var.Value;
+	public static T operator *(T var, SmartVariable<T, VARIABLET> smartVar)
+	{
+		dynamic x = var, y = smartVar.Value;
+		return x * y;
+	}
+	public static T operator +(T var, SmartVariable<T, VARIABLET> smartVar)
+	{
+		dynamic x = var, y = smartVar.Value;
+		return x + y;
+	}
 }

@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 
 [System.Serializable]
-[CreateAssetMenu(menuName = "SmartVariables/VariableSaver")]
+[CreateAssetMenu(menuName = "Variables/VariableSaver")]
 public class SmartVariableSaver : ScriptableObject
 {
     public string pathToSave;
