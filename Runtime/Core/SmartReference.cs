@@ -6,28 +6,28 @@ using UnityEditor;
 #endif
 
 #if UNITY_EDITOR
-class SmartReferenceResetter
-{
-	//Is here so that enter play mode without domain reloading works
-	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-	static void OnRuntimeMethodLoad()
-	{
-		string[] smartReferencesGuids = AssetDatabase.FindAssets("t:" + typeof(SmartReferenceBase).Name);
-		foreach (string guid in smartReferencesGuids)
-		{
-			AssetDatabase.LoadAssetAtPath<SmartReferenceBase>(AssetDatabase.GUIDToAssetPath(guid)).RemoveAllListeners();
-		}
-		string[] smartCollectionsGuids = AssetDatabase.FindAssets("t:" + typeof(SmartCollection).Name);
-		foreach (string guid in smartCollectionsGuids)
-		{
-			SmartCollection collection = AssetDatabase.LoadAssetAtPath<SmartCollection>(AssetDatabase.GUIDToAssetPath(guid));
-			foreach (SmartReferenceBase variable in collection.variables)
-			{
-				variable.RemoveAllListeners();
-			}
-		}
-	}
-}
+//class SmartReferenceResetter
+//{
+//	//Is here so that enter play mode without domain reloading works
+//	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+//	static void OnRuntimeMethodLoad()
+//	{
+//		string[] smartReferencesGuids = AssetDatabase.FindAssets("t:" + typeof(SmartReferenceBase).Name);
+//		foreach (string guid in smartReferencesGuids)
+//		{
+//			AssetDatabase.LoadAssetAtPath<SmartReferenceBase>(AssetDatabase.GUIDToAssetPath(guid)).RemoveAllListeners();
+//		}
+//		string[] smartCollectionsGuids = AssetDatabase.FindAssets("t:" + typeof(SmartCollection).Name);
+//		foreach (string guid in smartCollectionsGuids)
+//		{
+//			SmartCollection collection = AssetDatabase.LoadAssetAtPath<SmartCollection>(AssetDatabase.GUIDToAssetPath(guid));
+//			foreach (SmartReferenceBase variable in collection.variables)
+//			{
+//				variable.RemoveAllListeners();
+//			}
+//		}
+//	}
+//}
 #endif
 
 
