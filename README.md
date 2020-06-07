@@ -1,5 +1,5 @@
 # SmartVariables
-mart Variables is a system for Unity based on a Presentation about Game Architecture by Ryan Hipple.
+Smart Variables is a system for Unity based on a Presentation about Game Architecture by Ryan Hipple.
 
 It lets the user connect scripts to each other through a system of Scriptable Objects in a modular and convenient way.
 
