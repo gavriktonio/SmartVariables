@@ -8,6 +8,7 @@ The system is being used in and developed alongside [Jello](https://gavriktonio.
 ## Adding Package to your Unity Project
 
 ```Window -> Package Manager -> + -> Add package from git URL...```
+
 ```https://github.com/gavriktonio/SmartVariables.git```
 
 Samples are available through the package manager
