@@ -1,9 +1,9 @@
 # SmartVariables
-Smart Variables is a system for Unity based on a Presentation about Game Architecture by Ryan Hipple.
+Smart Variables is a system for Unity based on a [Presentation about Game Architecture by Ryan Hipple](https://www.youtube.com/watch?v=raQ3iHhE_Kk&t=2110s)
 
-It lets the user connect scripts to each other through a system of Scriptable Objects in a modular and convenient way.
+It lets the user connect scripts to each other through a system of Scriptable Objects in a modular and convenient way
 
-The system is being used in and developed alongside [Jello](https://gavriktonio.com/jello). 
+The system is being used in and developed alongside [Jello](https://gavriktonio.com/jello)
 
 ## Adding Package to your Unity Project
 
