@@ -5,55 +5,57 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
-[System.Serializable]
-[CreateAssetMenu(menuName = "Variables/StringComposite")]
-public class StringComposite : StringReference
+namespace SmartVariables
 {
-    private void OnEnable()
+    [System.Serializable]
+    [CreateAssetMenu(menuName = "Variables/StringComposite")]
+    public class StringComposite : StringReference
     {
-        foreach (SmartString smartString in stringsToAppend)
+        private void OnEnable()
         {
-            if (smartString.type == VarType.Reference)
+            foreach (SmartString smartString in stringsToAppend)
             {
-                smartString.AddListener(OnStringChanged);
+                if (smartString.type == VarType.Reference)
+                {
+                    smartString.AddListener(OnStringChanged);
+                }
             }
         }
-    }
 
-    private void OnDisable()
-    {
-        foreach (SmartString smartString in stringsToAppend)
+        private void OnDisable()
         {
-            if (smartString.type == VarType.Reference)
+            foreach (SmartString smartString in stringsToAppend)
             {
-                smartString.RemoveListener(OnStringChanged);
+                if (smartString.type == VarType.Reference)
+                {
+                    smartString.RemoveListener(OnStringChanged);
+                }
             }
         }
-    }
 
-    [SerializeField]
-    public SmartString[] stringsToAppend;
+        [SerializeField] public SmartString[] stringsToAppend;
 
-    void OnStringChanged(string oldString, string newString)
-    {
-        string composedString = "";
-        for(int i = 0; i < stringsToAppend.Length; i++)
+        void OnStringChanged(string oldString, string newString)
         {
-            composedString = composedString + stringsToAppend[i].Value;
+            string composedString = "";
+            for (int i = 0; i < stringsToAppend.Length; i++)
+            {
+                composedString = composedString + stringsToAppend[i].Value;
+            }
+
+            Value = composedString;
         }
-        Value = composedString;
     }
-}
 
 #if UNITY_EDITOR
-[CanEditMultipleObjects]
-[CustomEditor(typeof(StringComposite), true)]
-public class StringCompositeDrawer : Editor
-{
-	public override void OnInspectorGUI()
-	{
-		DrawDefaultInspector();
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(StringComposite), true)]
+    public class StringCompositeDrawer : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+        }
     }
-}
 #endif
+}

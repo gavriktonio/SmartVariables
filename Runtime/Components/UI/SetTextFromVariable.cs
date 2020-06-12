@@ -2,41 +2,45 @@
 using UnityEngine.UI;
 using TMPro;
 
-public class SetTextFromVariable : MonoBehaviour
+namespace SmartVariables
 {
-    private Text text;
-	private TMP_Text textTMPro;
-    public SmartReferenceBase variable;
-
-    private void OnEnable()
-    {
-        text = GetComponent<Text>();
-		textTMPro = GetComponent<TMP_Text>();
-
-		CheckReferences();
-    }
-    
-    void Update()
-    {
-		if (text != null)
-		{
-			text.text = variable.ValueAsString();
-		}
-		else if (textTMPro != null)
-		{
-			textTMPro.text = variable.ValueAsString();
-		}
-    }
-
-	void CheckReferences()
+	public class SetTextFromVariable : MonoBehaviour
 	{
-		if (text == null && textTMPro == null)
+		private Text text;
+		private TMP_Text textTMPro;
+		public SmartReferenceBase variable;
+
+		private void OnEnable()
 		{
-			Debug.LogError("A text component or TMProText component needs to be attached to this gameObject!");
+			text = GetComponent<Text>();
+			textTMPro = GetComponent<TMP_Text>();
+
+			CheckReferences();
 		}
-		if (variable == null)
+
+		void Update()
 		{
-			Debug.LogError("A variable is not assigned to set the text from!");
+			if (text != null)
+			{
+				text.text = variable.ValueAsString();
+			}
+			else if (textTMPro != null)
+			{
+				textTMPro.text = variable.ValueAsString();
+			}
+		}
+
+		void CheckReferences()
+		{
+			if (text == null && textTMPro == null)
+			{
+				Debug.LogError("A text component or TMProText component needs to be attached to this gameObject!");
+			}
+
+			if (variable == null)
+			{
+				Debug.LogError("A variable is not assigned to set the text from!");
+			}
 		}
 	}
 }

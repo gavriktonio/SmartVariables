@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 
-[System.Serializable]
-[CreateAssetMenu(menuName = "Variables/Float")]
-public class FloatReference : SmartReference<float> {}
+namespace SmartVariables
+{
+    [System.Serializable]
+    [CreateAssetMenu(menuName = "Variables/Float")]
+    public class FloatReference : SmartReference<float> { }
 
-[System.Serializable]
-public class SmartFloat : SmartVariable<float, FloatReference> {}
+    [System.Serializable]
+    public class SmartFloat : SmartVariable<float, FloatReference> { }
+}

@@ -4,116 +4,125 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-
-[System.Serializable]
-[CreateAssetMenu(menuName = "Variables/VariableSaver")]
-public class SmartVariableSaver : ScriptableObject
+namespace SmartVariables
 {
-    public string pathToSave;
-
-    private HashSet<SmartReferenceBase> queuedVariablesToSave = new HashSet<SmartReferenceBase>();
-    private Dictionary<int, object> cachedLoadedVariables = new Dictionary<int, object>();
-
-    private bool loaded = false;
-
-    public object GetSavedVariableValue(int variableId)
+    [System.Serializable]
+    [CreateAssetMenu(menuName = "Variables/VariableSaver")]
+    public class SmartVariableSaver : ScriptableObject
     {
-        if (!loaded)
-        {
-            LoadVariables();
-        }
-        if (cachedLoadedVariables.ContainsKey(variableId))
-        {
-            return cachedLoadedVariables[variableId];
-        }
-        return null;
-    }
+        public string pathToSave;
 
-    public void AddVariableToSaveQueue(SmartReferenceBase variable)
-    {
-        queuedVariablesToSave.Add(variable);
-    }
+        private HashSet<SmartReferenceBase> queuedVariablesToSave = new HashSet<SmartReferenceBase>();
+        private Dictionary<int, object> cachedLoadedVariables = new Dictionary<int, object>();
 
-    public void SaveQueuedVariables()
-    {
-        if (!loaded)
-        {
-            LoadVariables();
-        }
-        //saved queued variables into loaded cache
-        foreach (SmartReferenceBase var in queuedVariablesToSave)
-        {
-            cachedLoadedVariables[var.GetInstanceID()] = var.GetValueAsObject();
-        }
-        queuedVariablesToSave.Clear();
+        private bool loaded = false;
 
-        string pathAndName = Path.Combine(Application.persistentDataPath, pathToSave);
-        string fullPath = Path.GetDirectoryName(pathAndName);
-        if (!Directory.Exists(fullPath))
+        public object GetSavedVariableValue(int variableId)
         {
-            Directory.CreateDirectory(fullPath);
+            if (!loaded)
+            {
+                LoadVariables();
+            }
+
+            if (cachedLoadedVariables.ContainsKey(variableId))
+            {
+                return cachedLoadedVariables[variableId];
+            }
+
+            return null;
         }
 
-        FileStream file;
-        if (File.Exists(pathAndName))
+        public void AddVariableToSaveQueue(SmartReferenceBase variable)
         {
-            File.Delete(pathAndName);
-        }
-        file = File.Create(pathAndName);
-
-        BinaryFormatter bf = new BinaryFormatter();
-
-        bf.Serialize(file, cachedLoadedVariables.Count);
-
-        foreach (KeyValuePair<int, object> IdVarPair in cachedLoadedVariables)
-        {
-            bf.Serialize(file, IdVarPair.Key);
-            bf.Serialize(file, IdVarPair.Value);
+            queuedVariablesToSave.Add(variable);
         }
 
-        file.Close();
-    }
-
-    private void LoadVariables()
-    {
-        string pathAndName = Path.Combine(Application.persistentDataPath, pathToSave);
-
-        FileStream file;
-        BinaryFormatter bf = new BinaryFormatter();
-
-        if (File.Exists(pathAndName))
+        public void SaveQueuedVariables()
         {
-            file = File.OpenRead(pathAndName);
-        }
-        else
-        {
-            Debug.LogWarning("Saved variables file not found, creating new file: " + pathAndName);
+            if (!loaded)
+            {
+                LoadVariables();
+            }
+
+            //saved queued variables into loaded cache
+            foreach (SmartReferenceBase var in queuedVariablesToSave)
+            {
+                cachedLoadedVariables[var.GetInstanceID()] = var.GetValueAsObject();
+            }
+
+            queuedVariablesToSave.Clear();
+
+            string pathAndName = Path.Combine(Application.persistentDataPath, pathToSave);
+            string fullPath = Path.GetDirectoryName(pathAndName);
+            if (!Directory.Exists(fullPath))
+            {
+                Directory.CreateDirectory(fullPath);
+            }
+
+            FileStream file;
+            if (File.Exists(pathAndName))
+            {
+                File.Delete(pathAndName);
+            }
+
             file = File.Create(pathAndName);
-            bf.Serialize(file, 0);
+
+            BinaryFormatter bf = new BinaryFormatter();
+
+            bf.Serialize(file, cachedLoadedVariables.Count);
+
+            foreach (KeyValuePair<int, object> IdVarPair in cachedLoadedVariables)
+            {
+                bf.Serialize(file, IdVarPair.Key);
+                bf.Serialize(file, IdVarPair.Value);
+            }
+
             file.Close();
-            return;
         }
 
-
-        int variablesCount = (int)bf.Deserialize(file);
-
-        for (int i = 0; i < variablesCount; i++)
+        private void LoadVariables()
         {
-            int deserializedId;
-            object deserializedObject;
-            try
+            string pathAndName = Path.Combine(Application.persistentDataPath, pathToSave);
+
+            FileStream file;
+            BinaryFormatter bf = new BinaryFormatter();
+
+            if (File.Exists(pathAndName))
             {
-                deserializedId = (int)bf.Deserialize(file);
-                deserializedObject = bf.Deserialize(file);
+                file = File.OpenRead(pathAndName);
             }
-            catch (System.SystemException e)
+            else
             {
-                Debug.LogWarning("Error reading from" + pathAndName + ". Message = " + e.Message);
-                break;
+                Debug.LogWarning("Saved variables file not found, creating new file: " + pathAndName);
+                file = File.Create(pathAndName);
+                bf.Serialize(file, 0);
+                file.Close();
+                return;
             }
-            cachedLoadedVariables.Add(deserializedId, deserializedObject);
+
+
+            int variablesCount = (int) bf.Deserialize(file);
+
+            for (int i = 0; i < variablesCount; i++)
+            {
+                int deserializedId;
+                object deserializedObject;
+                try
+                {
+                    deserializedId = (int) bf.Deserialize(file);
+                    deserializedObject = bf.Deserialize(file);
+                }
+                catch (System.SystemException e)
+                {
+                    Debug.LogWarning("Error reading from" + pathAndName + ". Message = " + e.Message);
+                    break;
+                }
+
+                cachedLoadedVariables.Add(deserializedId, deserializedObject);
+            }
+
+            file.Close();
+            loaded = true;
         }
-        file.Close();
-        loaded = true;
     }
 }

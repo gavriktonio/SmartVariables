@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -30,59 +30,67 @@ using UnityEditor;
 //}
 #endif
 
-
-public abstract class SmartReferenceBase : ScriptableObject
+namespace SmartVariables
 {
-	[Tooltip("Log all the changes, happening to this variable")]
-	public bool debugLog = false;
-	[Tooltip("If true, the runtime value will persist between play sessions")]
-	public bool persistent = false;
-	public SmartVariableSaver variableSaver;
-	[Tooltip("If true, callbacks will be triggered even if the variable is set to the same value as before")]
-	public bool forceCallbacks = false;
-
-	abstract public void PrepareEditorCallbacks();
-	abstract public void InvokeEditorCallbacks();
-	abstract public string ValueAsString();
-	//Mainly to be used to reset persistent variables value to initial state
-	abstract public void ResetRuntimeValue();
-    abstract public object GetValueAsObject();
-    abstract public void SetRuntimeValueFromObject(object obj);
-	abstract public void RemoveAllListeners();
-}
-
-[System.Serializable]
-public class SmartReference<T> : SmartReferenceBase, ISerializationCallbackReceiver
-{
-	[SerializeField]
-	private T initialValue;
-	//Needs to be serialized to be accessible from the inspector
-	//May be possible to change to not-serialized in final build
-	[SerializeField]
-	private T runtimeValue;
-
-	public delegate void VariableSetEvent(T oldValue, T newValue);
-	private VariableSetEvent listeners;
-
-	//If a value set is called when a value set is already taking place, 
-	//we need to finish calling all the listeners before setting the new value.
-	//Therefore, we store the new set value in a queue until all the listeners are done.
-
-	//The queue is also being used to store old values when a change is done from unity editor inspector
-	private Queue<T> setQueue = null;
-	private bool settingInProgress = false;
-	private T lastQueued;
-
-	public void OnBeforeSerialize()
+	public abstract class SmartReferenceBase : ScriptableObject
 	{
+		[FormerlySerializedAs("debugLog")]
+		[Tooltip("Log all the changes, happening to this variable")]
+		public bool DebugLog = false;
+
+		[FormerlySerializedAs("persistent")]
+		[Tooltip("If true, the runtime value will persist between play sessions")]
+		public bool Persistent = false;
+
+		[FormerlySerializedAs("variableSaver")]
+		public SmartVariableSaver VariableSaver;
+
+		[FormerlySerializedAs("forceCallbacks")]
+		[Tooltip("If true, callbacks will be triggered even if the variable is set to the same value as before")]
+		public bool ForceCallbacks = false;
+
+		public abstract void PrepareEditorCallbacks();
+		public abstract void InvokeEditorCallbacks();
+
+		public abstract string ValueAsString();
+
+		//Mainly to be used to reset persistent variables value to initial state
+		public abstract void ResetRuntimeValue();
+		public abstract object GetValueAsObject();
+		public abstract void SetRuntimeValueFromObject(object obj);
+		public abstract void RemoveAllListeners();
 	}
 
-    void OnEnable()
-    {
-        if (debugLog)
-        {
-            Debug.Log("SmartReference: " + name + " OnEnable: ");
-        }
+	[System.Serializable]
+	public class SmartReference<T> : SmartReferenceBase, ISerializationCallbackReceiver
+	{
+		[SerializeField] private T initialValue;
+
+		//Needs to be serialized to be accessible from the inspector
+		//May be possible to change to not-serialized in final build
+		[SerializeField] private T runtimeValue;
+
+		public delegate void VariableSetEvent(T oldValue, T newValue);
+
+		private VariableSetEvent listeners;
+
+		//If a value set is called when a value set is already taking place, 
+		//we need to finish calling all the listeners before setting the new value.
+		//Therefore, we store the new set value in a queue until all the listeners are done.
+
+		//The queue is also being used to store old values when a change is done from unity editor inspector
+		private Queue<T> setQueue = null;
+		private bool settingInProgress = false;
+		private T lastQueued;
+
+		public void OnBeforeSerialize() { }
+
+		void OnEnable()
+		{
+			if (DebugLog)
+			{
+				Debug.Log("SmartReference: " + name + " OnEnable: ");
+			}
 #if !UNITY_EDITOR
         if (persistent)
         {
@@ -107,223 +115,242 @@ public class SmartReference<T> : SmartReferenceBase, ISerializationCallbackRecei
             }
         }
 #endif
-    }
+		}
 
-    //Gets called when a game starts, as well as when changing the value from the editor
-    public void OnAfterDeserialize()
-	{
-		if (debugLog)
+		//Gets called when a game starts, as well as when changing the value from the editor
+		public void OnAfterDeserialize()
 		{
-			//It's not possible to use .name in OnAfterDeserialize
-			Debug.Log("SmartReference: _________ after deserialize");
-			if (setQueue != null && setQueue.Count < 1)
+			if (DebugLog)
 			{
-				Debug.Log("SmartReference: _________ queue not clear after deserialize. This should happen only when the value gets changed from the editor. Queue count: " + setQueue.Count);
+				//It's not possible to use .name in OnAfterDeserialize
+				Debug.Log("SmartReference: _________ after deserialize");
+				if (setQueue != null && setQueue.Count < 1)
+				{
+					Debug.Log(
+						"SmartReference: _________ queue not clear after deserialize. This should happen only when the value gets changed from the editor. Queue count: " +
+						setQueue.Count);
+				}
+			}
+
+			//The only case where this should be false is when the value gets changed from the editor
+			if (setQueue == null || setQueue.Count < 1)
+			{
+				if (!Persistent)
+				{
+					runtimeValue = initialValue;
+				}
+
+				listeners = null;
+				setQueue = null;
+				settingInProgress = false;
 			}
 		}
-		//The only case where this should be false is when the value gets changed from the editor
-		if (setQueue == null || setQueue.Count < 1)
-		{
-            if (!persistent)
-            {
-                runtimeValue = initialValue;
-            }
-            listeners = null;
-			setQueue = null;
-			settingInProgress = false;
-		}
-	}
 
 
-	public T Value
-	{
-		get
+		public T Value
 		{
-			return runtimeValue;
-		}
-		set
-		{
-			//Only change the value if
-			if (
-				//It's not the same as the current one and no changes are queued
-				((settingInProgress == false || (setQueue == null || setQueue.Count == 0)) && !value.Equals(runtimeValue)) ||
-				//More changes are queued up and it's not the same as the last queued
-				(setQueue != null && setQueue.Count > 0 && !value.Equals(lastQueued)) ||
-				//Force callbacks option is on
-				forceCallbacks)
+			get { return runtimeValue; }
+			set
 			{
-				//if a set is called from a callback of a set happening, save the set value in a queue and do it later
-				if (settingInProgress == true)
+				//Only change the value if
+				if (
+					//It's not the same as the current one and no changes are queued
+					((settingInProgress == false || (setQueue == null || setQueue.Count == 0)) &&
+					 !value.Equals(runtimeValue)) ||
+					//More changes are queued up and it's not the same as the last queued
+					(setQueue != null && setQueue.Count > 0 && !value.Equals(lastQueued)) ||
+					//Force callbacks option is on
+					ForceCallbacks)
 				{
-					if (setQueue == null)
+					//if a set is called from a callback of a set happening, save the set value in a queue and do it later
+					if (settingInProgress == true)
 					{
-						setQueue = new Queue<T>();
-					}
-					setQueue.Enqueue(value);
-					lastQueued = value;
-					if (debugLog)
-					{
-						Debug.Log("SmartReference: " + name + " queued up a new value to set: " + value.ToString() + ". queue length: " + setQueue.Count);
-					}
-					return;
-				}
+						if (setQueue == null)
+						{
+							setQueue = new Queue<T>();
+						}
 
-				if (debugLog)
+						setQueue.Enqueue(value);
+						lastQueued = value;
+						if (DebugLog)
+						{
+							Debug.Log("SmartReference: " + name + " queued up a new value to set: " + value.ToString() +
+							          ". queue length: " + setQueue.Count);
+						}
+
+						return;
+					}
+
+					if (DebugLog)
+					{
+						Debug.Log("SmartReference: " + name + " is being set from " + runtimeValue + " to " +
+						          value.ToString());
+					}
+
+					settingInProgress = true;
+
+					T oldValue = runtimeValue;
+					runtimeValue = value;
+
+					if (VariableSaver != null)
+					{
+						if (DebugLog)
+						{
+							Debug.Log("SmartReference: " + name + " with value " + value.ToString() +
+							          " is being queued to save with variable saver " + VariableSaver.name);
+						}
+
+						VariableSaver.AddVariableToSaveQueue(this);
+					}
+
+					if (listeners != null)
+					{
+						listeners.Invoke(oldValue, runtimeValue);
+					}
+
+					settingInProgress = false;
+
+					//After setting the variable, check if other values are queued up
+					//If so, call the function recursively to set the queued up value
+					if (setQueue != null && setQueue.Count > 0)
+					{
+						if (DebugLog)
+						{
+							Debug.Log("SmartReference: " + name + " dequeued a value: " + setQueue.Peek());
+						}
+
+						T newValue = setQueue.Dequeue();
+						this.Value = (newValue);
+					}
+				}
+				else
 				{
-					Debug.Log("SmartReference: " + name + " is being set from " + runtimeValue + " to " + value.ToString());
-				}
-
-				settingInProgress = true;
-
-				T oldValue = runtimeValue;
-				runtimeValue = value;
-
-                if (variableSaver != null)
-                {
-					if (debugLog)
+					if (DebugLog)
 					{
-						Debug.Log("SmartReference: " + name + " with value " + value.ToString() + " is being queued to save with variable saver " + variableSaver.name);
+						Debug.Log("SmartReference: " + name +
+						          " value set to " + value +
+						          " regected. It's the same as the previous one. If callbacks should still work in this case, turn on the force callbacks option in the variable ");
 					}
-					variableSaver.AddVariableToSaveQueue(this);
-                }
-
-				if (listeners != null)
-				{
-					listeners.Invoke(oldValue, runtimeValue);
 				}
+			}
+		}
 
-				settingInProgress = false;
+		//Gets called from the editor before inspector modifies the values.
+		//Because the old values are gone after the change, 
+		//we save them in the setQueue.
+		public override void PrepareEditorCallbacks()
+		{
+			if (setQueue == null)
+			{
+				setQueue = new Queue<T>();
+			}
 
-				//After setting the variable, check if other values are queued up
-				//If so, call the function recursively to set the queued up value
-				if (setQueue != null && setQueue.Count > 0)
-				{
-					if (debugLog)
-					{
-						Debug.Log("SmartReference: " + name + " dequeued a value: " + setQueue.Peek());
-					}
-					T newValue = setQueue.Dequeue();
-					this.Value = (newValue);
-				}
+			setQueue.Enqueue(initialValue);
+			setQueue.Enqueue(runtimeValue);
+		}
+
+		//Gets called after the editor inspector modifies the values.
+		//We take the values back from the queue, and make sure that 
+		//The listeners get invoked.
+		public override void InvokeEditorCallbacks()
+		{
+			T newInitialValue = initialValue;
+			T newRuntimeValue = runtimeValue;
+
+			initialValue = setQueue.Dequeue();
+			runtimeValue = setQueue.Dequeue();
+
+			if (initialValue == null || !initialValue.Equals(newInitialValue))
+			{
+				initialValue = newInitialValue;
+				Value = newInitialValue;
 			}
 			else
 			{
-				if (debugLog)
+				Value = newRuntimeValue;
+			}
+		}
+
+		public override string ValueAsString()
+		{
+			return Value.ToString();
+		}
+
+		public override object GetValueAsObject()
+		{
+			return (object) Value;
+		}
+
+		public override void SetRuntimeValueFromObject(object obj)
+		{
+			T oldValue = runtimeValue;
+			runtimeValue = (T) obj;
+			if (listeners != null)
+			{
+				listeners.Invoke(oldValue, runtimeValue);
+			}
+		}
+
+		public override void ResetRuntimeValue()
+		{
+			if (DebugLog)
+			{
+				Debug.Log("SmartReference: " + name + " ResetRuntimeValue");
+			}
+
+			runtimeValue = initialValue;
+		}
+
+		public void AddListener(VariableSetEvent listener)
+		{
+			if (DebugLog)
+			{
+				Debug.Log("SmartReference: " + name + " AddListener");
+			}
+
+			listeners += listener;
+		}
+
+		public void RemoveListener(VariableSetEvent listener)
+		{
+			if (DebugLog)
+			{
+				Debug.Log("SmartReference: " + name + " RemoveListener");
+			}
+
+			listeners -= listener;
+		}
+
+		public override void RemoveAllListeners()
+		{
+			if (DebugLog)
+			{
+				Debug.Log("SmartReference: " + name + " RemoveAllListeners");
+			}
+
+			if (listeners != null)
+			{
+				foreach (VariableSetEvent d in listeners.GetInvocationList())
 				{
-					Debug.Log("SmartReference: " + name +
-						" value set to " + value + " regected. It's the same as the previous one. If callbacks should still work in this case, turn on the force callbacks option in the variable ");
+					listeners -= d;
 				}
 			}
 		}
-	}
 
-	//Gets called from the editor before inspector modifies the values.
-	//Because the old values are gone after the change, 
-	//we save them in the setQueue.
-	public override void PrepareEditorCallbacks()
-	{
-		if (setQueue == null)
+		public static implicit operator T(SmartReference<T> smartVar) => smartVar.Value;
+
+		public static T operator *(T var, SmartReference<T> smartVar)
 		{
-			setQueue = new Queue<T>();
+			dynamic x = var, y = smartVar.Value;
+			
+			return x * y;
 		}
-		setQueue.Enqueue(initialValue);
-		setQueue.Enqueue(runtimeValue);
-	}
 
-	//Gets called after the editor inspector modifies the values.
-	//We take the values back from the queue, and make sure that 
-	//The listeners get invoked.
-	public override void InvokeEditorCallbacks()
-	{
-		T newInitialValue = initialValue;
-		T newRuntimeValue = runtimeValue;
-
-		initialValue = setQueue.Dequeue();
-		runtimeValue = setQueue.Dequeue();
-
-		if (initialValue == null || !initialValue.Equals(newInitialValue))
+		public static T operator +(T var, SmartReference<T> smartVar)
 		{
-			initialValue = newInitialValue;
-			Value = newInitialValue;
-		}
-		else
-		{
-			Value = newRuntimeValue;
+			dynamic x = var, y = smartVar.Value;
+			return x + y;
 		}
 	}
-
-	public override string ValueAsString()
-	{
-		return Value.ToString();
-	}
-
-    public override object GetValueAsObject()
-    {
-        return (object)Value;
-    }
-
-    public override void SetRuntimeValueFromObject(object obj)
-    {
-        T oldValue = runtimeValue;
-        runtimeValue = (T)obj;
-        if (listeners != null)
-        {
-            listeners.Invoke(oldValue, runtimeValue);
-        }
-    }
-
-    public override void ResetRuntimeValue()
-	{
-		if (debugLog)
-		{
-			Debug.Log("SmartReference: " + name + " ResetRuntimeValue");
-		}
-		runtimeValue = initialValue;
-	}
-
-	public void AddListener(VariableSetEvent listener)
-	{
-		if (debugLog)
-		{
-			Debug.Log("SmartReference: " + name + " AddListener");
-		}
-		listeners += listener;
-	}
-
-	public void RemoveListener(VariableSetEvent listener)
-	{
-		if (debugLog)
-		{
-			Debug.Log("SmartReference: " + name + " RemoveListener");
-		}
-		listeners -= listener;
-	}
-
-	public override void RemoveAllListeners()
-	{
-		if (debugLog)
-		{
-			Debug.Log("SmartReference: " + name + " RemoveAllListeners");
-		}
-		if (listeners != null)
-		{
-			foreach (VariableSetEvent d in listeners.GetInvocationList())
-			{
-				listeners -= d;
-			}
-		}
-	}
-
-	public static implicit operator T(SmartReference<T> smartVar) => smartVar.Value;
-	public static T operator *(T var, SmartReference<T> smartVar)
-	{
-		dynamic x = var, y = smartVar.Value;
-		return x * y;
-	}
-	public static T operator +(T var, SmartReference<T> smartVar)
-	{
-		dynamic x = var, y = smartVar.Value;
-		return x + y;
-	}
-
 }
+

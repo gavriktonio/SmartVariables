@@ -3,76 +3,82 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomPropertyDrawer(typeof(SmartVariableBase), true)]
-public class SmartVariableDrawer : PropertyDrawer
+namespace SmartVariables
 {
-	const float standardHeight = 18;
-	const float standardGap = 2;
-
-	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+	[CustomPropertyDrawer(typeof(SmartVariableBase), true)]
+	public class SmartVariableDrawer : PropertyDrawer
 	{
-		if (property.FindPropertyRelative("type").enumValueIndex >= 1)
-		{
-			SerializedProperty referenceObjectProperty = property.FindPropertyRelative("reference");
-			Object referenceObject = referenceObjectProperty.objectReferenceValue;
-			if (referenceObject != null)
-			{
-				//Find the runtime value in the SmartReference, referenced in the SmartVariable
-				SerializedObject serializedObject = new SerializedObject(referenceObject);
-				SerializedProperty runtimeValue = serializedObject.FindProperty("runtimeValue");
+		const float standardHeight = 18;
+		const float standardGap = 2;
 
-				//Display children below only when property is opened. So no need for extra space
-				return EditorGUI.GetPropertyHeight(referenceObjectProperty, true) + standardGap;
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+		{
+			if (property.FindPropertyRelative("type").enumValueIndex >= 1)
+			{
+				SerializedProperty referenceObjectProperty = property.FindPropertyRelative("reference");
+				Object referenceObject = referenceObjectProperty.objectReferenceValue;
+				if (referenceObject != null)
+				{
+					//Find the runtime value in the SmartReference, referenced in the SmartVariable
+					SerializedObject serializedObject = new SerializedObject(referenceObject);
+					SerializedProperty runtimeValue = serializedObject.FindProperty("runtimeValue");
+
+					//Display children below only when property is opened. So no need for extra space
+					return EditorGUI.GetPropertyHeight(referenceObjectProperty, true) + standardGap;
+				}
+				else
+				{
+					return standardHeight;
+				}
 			}
 			else
 			{
-				return standardHeight;
+				//Find the runtime value in the SmartVariable;
+				SerializedProperty runtimeValue = property.FindPropertyRelative("runtimeValue");
+				return EditorGUI.GetPropertyHeight(runtimeValue, true) + standardGap;
 			}
 		}
-		else
+
+		// Draw the property inside the given rect
+		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			//Find the runtime value in the SmartVariable;
-			SerializedProperty runtimeValue = property.FindPropertyRelative("runtimeValue");
-			return EditorGUI.GetPropertyHeight(runtimeValue, true) + standardGap;
-		}
-	}
+			VarType variableType = (VarType) property.FindPropertyRelative("type").enumValueIndex;
 
-	// Draw the property inside the given rect
-	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-	{
-		VarType variableType = (VarType)property.FindPropertyRelative("type").enumValueIndex;
+			Rect referenceRect = EditorGUI.PrefixLabel(position, label);
 
-		Rect referenceRect = EditorGUI.PrefixLabel(position, label);
+			//Draw drawer with choice of variable type
+			Rect typeSelectRect = referenceRect;
+			typeSelectRect.xMin -= ((standardHeight + standardGap) + (15 * (property.depth)));
+			typeSelectRect.width = standardHeight + (15 * (property.depth));
 
-		//Draw drawer with choice of variable type
-		Rect typeSelectRect = referenceRect;
-		typeSelectRect.xMin -= ((standardHeight + standardGap) + (15 * (property.depth)));
-		typeSelectRect.width = standardHeight + (15 * (property.depth));
+			EditorGUI.PropertyField(typeSelectRect, property.FindPropertyRelative("type"), GUIContent.none);
 
-		EditorGUI.PropertyField(typeSelectRect, property.FindPropertyRelative("type"), GUIContent.none);
+			// Using BeginProperty / EndProperty on the parent property means that
+			// prefab override logic works on the entire property.
+			EditorGUI.BeginProperty(position, label, property);
 
-		// Using BeginProperty / EndProperty on the parent property means that
-		// prefab override logic works on the entire property.
-		EditorGUI.BeginProperty(position, label, property);
-
-		if (variableType == VarType.Constant)
-		{
-			SerializedProperty runtimeValue = property.FindPropertyRelative("runtimeValue");
-			EditorGUI.PropertyField(position, runtimeValue, new GUIContent(" "), true);
-		}
-
-		else if (variableType == VarType.Reference)
-		{
-			SerializedProperty serializedProperty = property.FindPropertyRelative("reference");
-			if (EditorGUI.PropertyField(position, serializedProperty, new GUIContent(" "), true))
+			if (variableType == VarType.Constant)
 			{
-				EditorUtility.SetDirty(property.serializedObject.targetObject);
+				SerializedProperty runtimeValue = property.FindPropertyRelative("runtimeValue");
+				EditorGUI.PropertyField(position, runtimeValue, new GUIContent(" "), true);
 			}
+
+			else if (variableType == VarType.Reference)
+			{
+				SerializedProperty serializedProperty = property.FindPropertyRelative("reference");
+				if (EditorGUI.PropertyField(position, serializedProperty, new GUIContent(" "), true))
+				{
+					EditorUtility.SetDirty(property.serializedObject.targetObject);
+				}
+			}
+
+			EditorGUI.EndProperty();
 		}
 
-		EditorGUI.EndProperty();
+		//Without this, the half transparent rectangles flicker (those get drawn to signify persistent references)
+		public override bool CanCacheInspectorGUI(SerializedProperty property)
+		{
+			return false;
+		}
 	}
-
-	//Without this, the half transparent rectangles flicker (those get drawn to signify persistent references)
-	public override bool CanCacheInspectorGUI(SerializedProperty property) { return false; }
 }

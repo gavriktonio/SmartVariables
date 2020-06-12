@@ -3,44 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ToggleBoolBinding : MonoBehaviour
+namespace SmartVariables
 {
-    private Toggle toggle;
-    public BoolReference boolean;
-
-    private void OnEnable()
+    public class ToggleBoolBinding : MonoBehaviour
     {
-        toggle = GetComponent<Toggle>();
-        CheckReferences();
-    }
+        private Toggle toggle;
+        public BoolReference boolean;
 
-    private void Start()
-    {
-        boolean.AddListener(OnBoolChanged);
-        toggle.onValueChanged.AddListener(OnToggleChanged);
-
-        OnBoolChanged(false, boolean.Value);
-    }
-
-    void OnBoolChanged(bool oldBool, bool newBool)
-    {
-        toggle.SetIsOnWithoutNotify(newBool);
-    }
-
-    void OnToggleChanged(bool newToggle)
-    {
-        boolean.Value = newToggle;
-    }
-
-    void CheckReferences()
-    {
-        if (toggle == null)
+        private void OnEnable()
         {
-            Debug.LogError("A toggle component needs to be attached to this gameObject!");
+            toggle = GetComponent<Toggle>();
+            CheckReferences();
         }
-        if (boolean == null)
+
+        private void Start()
         {
-            Debug.LogError("A boolean variable is not assigned to use with this toggle!");
+            boolean.AddListener(OnBoolChanged);
+            toggle.onValueChanged.AddListener(OnToggleChanged);
+
+            OnBoolChanged(false, boolean.Value);
+        }
+
+        void OnBoolChanged(bool oldBool, bool newBool)
+        {
+            toggle.SetIsOnWithoutNotify(newBool);
+        }
+
+        void OnToggleChanged(bool newToggle)
+        {
+            boolean.Value = newToggle;
+        }
+
+        void CheckReferences()
+        {
+            if (toggle == null)
+            {
+                Debug.LogError("A toggle component needs to be attached to this gameObject!");
+            }
+
+            if (boolean == null)
+            {
+                Debug.LogError("A boolean variable is not assigned to use with this toggle!");
+            }
         }
     }
 }

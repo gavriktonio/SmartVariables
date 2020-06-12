@@ -2,54 +2,60 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnableBasedOnBool : MonoBehaviour
+namespace SmartVariables
 {
-    public BoolReference boolReference;
-
-    public GameObject[] enableWhenTrue;
-    public GameObject[] enableWhenFalse;
-
-    public BoolReference[] trueWhenTrue;
-    public BoolReference[] trueWhenFalse;
-    
-    void OnEnable ()
+    public class EnableBasedOnBool : MonoBehaviour
     {
-        SetupListener();
-	}
+        public BoolReference boolReference;
 
-    private void OnDisable()
-    {
-        RemoveListener();
-    }
+        public GameObject[] enableWhenTrue;
+        public GameObject[] enableWhenFalse;
 
-    void SetupListener()
-    {
-        boolReference.AddListener(OnBoolChanged);
-        OnBoolChanged(false, boolReference.Value);
-    }
+        public BoolReference[] trueWhenTrue;
+        public BoolReference[] trueWhenFalse;
 
-    void RemoveListener()
-    {
-        boolReference.RemoveListener(OnBoolChanged);
-    }
-
-    void OnBoolChanged(bool oldBool, bool newBool)
-    {
-        foreach (GameObject i in enableWhenTrue)
+        void OnEnable()
         {
-            i.SetActive(newBool);
+            SetupListener();
         }
-        foreach (GameObject i in enableWhenFalse)
+
+        private void OnDisable()
         {
-            i.SetActive(!newBool);
+            RemoveListener();
         }
-        foreach (BoolReference i in trueWhenTrue)
+
+        void SetupListener()
         {
-            i.Value = newBool;
+            boolReference.AddListener(OnBoolChanged);
+            OnBoolChanged(false, boolReference.Value);
         }
-        foreach (BoolReference i in trueWhenFalse)
+
+        void RemoveListener()
         {
-            i.Value = !newBool;
+            boolReference.RemoveListener(OnBoolChanged);
+        }
+
+        void OnBoolChanged(bool oldBool, bool newBool)
+        {
+            foreach (GameObject i in enableWhenTrue)
+            {
+                i.SetActive(newBool);
+            }
+
+            foreach (GameObject i in enableWhenFalse)
+            {
+                i.SetActive(!newBool);
+            }
+
+            foreach (BoolReference i in trueWhenTrue)
+            {
+                i.Value = newBool;
+            }
+
+            foreach (BoolReference i in trueWhenFalse)
+            {
+                i.Value = !newBool;
+            }
         }
     }
 }

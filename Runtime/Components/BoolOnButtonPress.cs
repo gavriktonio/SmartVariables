@@ -3,41 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
-public class BoolOnButtonPress : MonoBehaviour
+namespace SmartVariables
 {
-    public enum BoolState
+    public class BoolOnButtonPress : MonoBehaviour
     {
-        DEFAULT,
-        TRUE,
-        FALSE
-    }
-    public BoolState defaultOverride;
-    public BoolReference boolToSwitch;
-    public SmartString modifierButtonName;
-    public SmartString buttonName;
-
-    private void Start()
-    {
-        if (defaultOverride == BoolState.TRUE)
+        public enum BoolState
         {
-            boolToSwitch.Value = true;
+            DEFAULT,
+            TRUE,
+            FALSE
         }
-        else if (defaultOverride == BoolState.FALSE)
-        {
-            boolToSwitch.Value = false;
-        }
-    }
 
-    // Update is called once per frame
-    void Update ()
-    {
-		if (Input.GetButtonDown(buttonName.Value))
+        public BoolState defaultOverride;
+        public BoolReference boolToSwitch;
+        public SmartString modifierButtonName;
+        public SmartString buttonName;
+
+        private void Start()
         {
-            if (modifierButtonName.Value == "" || Input.GetButton(modifierButtonName.Value))
+            if (defaultOverride == BoolState.TRUE)
             {
-                boolToSwitch.Value = !boolToSwitch.Value;
+                boolToSwitch.Value = true;
+            }
+            else if (defaultOverride == BoolState.FALSE)
+            {
+                boolToSwitch.Value = false;
             }
         }
-	}
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (Input.GetButtonDown(buttonName.Value))
+            {
+                if (modifierButtonName.Value == "" || Input.GetButton(modifierButtonName.Value))
+                {
+                    boolToSwitch.Value = !boolToSwitch.Value;
+                }
+            }
+        }
+    }
 }
