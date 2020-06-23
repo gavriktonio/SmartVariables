@@ -92,15 +92,15 @@ namespace SmartVariables
 				Debug.Log("SmartReference: " + name + " OnEnable: ");
 			}
 #if !UNITY_EDITOR
-        if (persistent)
+        if (Persistent)
         {
-            if (variableSaver != null)
+            if (VariableSaver != null)
             {
-                object savedValue = variableSaver.GetSavedVariableValue(GetInstanceID());
+                object savedValue = VariableSaver.GetSavedVariableValue(GetInstanceID());
                 if (savedValue != null)
                 {
                     SetRuntimeValueFromObject(savedValue);
-                    if (debugLog)
+                    if (DebugLog)
                     {
                         Debug.Log("SmartReference: " + name + " persistent value was loaded OnEnable: " + Value);
                     }
@@ -109,7 +109,7 @@ namespace SmartVariables
             }
             //If can't find saved value, reset to initial 
             ResetRuntimeValue();
-            if (debugLog)
+            if (DebugLog)
             {
                 Debug.Log("SmartReference: " + name + " persistent value could not be loaded, reset to initial: " + Value);
             }
