@@ -50,7 +50,7 @@ namespace SmartVariables
 			if (property.objectReferenceValue != null)
 			{
 				SerializedObject referencedVariable = new SerializedObject(property.objectReferenceValue);
-				SerializedProperty isPersistentProperty = referencedVariable.FindProperty("persistent");
+				SerializedProperty isPersistentProperty = referencedVariable.FindProperty("Persistent");
 				bool isVariablePersistent = isPersistentProperty.boolValue;
 				SerializedProperty value;
 				if (Application.isPlaying || isVariablePersistent)
@@ -91,7 +91,7 @@ namespace SmartVariables
 				}
 
 
-				if (referencedVariable.FindProperty("persistent").boolValue == true)
+				if (referencedVariable.FindProperty("Persistent").boolValue == true)
 				{
 					EditorGUI.DrawRect(referenceRect, new Color(1.0f, 0.0f, 0.0f, 0.2f));
 				}

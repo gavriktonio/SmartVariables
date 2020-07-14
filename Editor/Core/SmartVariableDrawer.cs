@@ -13,7 +13,7 @@ namespace SmartVariables
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			if (property.FindPropertyRelative("type").enumValueIndex >= 1)
+			if (property.FindPropertyRelative("Type").enumValueIndex >= 1)
 			{
 				SerializedProperty referenceObjectProperty = property.FindPropertyRelative("reference");
 				Object referenceObject = referenceObjectProperty.objectReferenceValue;
@@ -42,16 +42,16 @@ namespace SmartVariables
 		// Draw the property inside the given rect
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			VarType variableType = (VarType) property.FindPropertyRelative("type").enumValueIndex;
+			VarType variableType = (VarType) property.FindPropertyRelative("Type").enumValueIndex;
 
 			Rect referenceRect = EditorGUI.PrefixLabel(position, label);
 
-			//Draw drawer with choice of variable type
+			//Draw drawer with choice of variable Type
 			Rect typeSelectRect = referenceRect;
 			typeSelectRect.xMin -= ((standardHeight + standardGap) + (15 * (property.depth)));
 			typeSelectRect.width = standardHeight + (15 * (property.depth));
 
-			EditorGUI.PropertyField(typeSelectRect, property.FindPropertyRelative("type"), GUIContent.none);
+			EditorGUI.PropertyField(typeSelectRect, property.FindPropertyRelative("Type"), GUIContent.none);
 
 			// Using BeginProperty / EndProperty on the parent property means that
 			// prefab override logic works on the entire property.

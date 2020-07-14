@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SmartVariables
 {
@@ -18,7 +19,7 @@ namespace SmartVariables
 	[System.Serializable]
 	public class SmartVariable<T, VARIABLET> : SmartVariableBase where VARIABLET : SmartReference<T>
 	{
-		public VarType type;
+		[FormerlySerializedAs("type")] public VarType Type;
 
 		[SerializeField] private VARIABLET reference;
 
@@ -28,31 +29,31 @@ namespace SmartVariables
 			set { reference = value; }
 		}
 		
-		//only valid when the type is constant
+		//only valid when the Type is constant
 		public T runtimeValue;
 
 		public void AddListener(SmartReference<T>.VariableSetEvent listener)
 		{
-			switch (type)
+			switch (Type)
 			{
 				case VarType.Reference:
 					Reference.AddListener(listener);
 					break;
 				default:
-					Debug.LogWarning("Trying to listen for unsupported type variable changes");
+					Debug.LogWarning("Trying to listen for unsupported Type variable changes");
 					break;
 			}
 		}
 
 		public void RemoveListener(SmartReference<T>.VariableSetEvent listener)
 		{
-			switch (type)
+			switch (Type)
 			{
 				case VarType.Reference:
 					Reference.RemoveListener(listener);
 					break;
 				default:
-					Debug.LogWarning("SmartVariable: Trying to listen for unsupported type variable changes");
+					Debug.LogWarning("SmartVariable: Trying to listen for unsupported Type variable changes");
 					break;
 			}
 		}
@@ -61,7 +62,7 @@ namespace SmartVariables
 		{
 			get
 			{
-				switch (type)
+				switch (Type)
 				{
 					case VarType.Constant:
 						return runtimeValue;
@@ -75,13 +76,13 @@ namespace SmartVariables
 						return Reference.Value;
 					default:
 						Debug.LogError("SmartVariable: INVALID TYPE VARIABLE");
-						Debug.Log(type);
+						Debug.Log(Type);
 						return default(T);
 				}
 			}
 			set
 			{
-				switch (type)
+				switch (Type)
 				{
 					case VarType.Constant:
 						runtimeValue = value;

@@ -15,7 +15,7 @@ namespace SmartVariables
         {
             foreach (SmartString smartString in stringsToAppend)
             {
-                if (smartString.type == VarType.Reference)
+                if (smartString.Type == VarType.Reference)
                 {
                     smartString.AddListener(OnStringChanged);
                 }
@@ -26,7 +26,7 @@ namespace SmartVariables
         {
             foreach (SmartString smartString in stringsToAppend)
             {
-                if (smartString.type == VarType.Reference)
+                if (smartString.Type == VarType.Reference)
                 {
                     smartString.RemoveListener(OnStringChanged);
                 }

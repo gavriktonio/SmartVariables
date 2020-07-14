@@ -26,10 +26,10 @@ namespace SmartVariables
 					return;
 				}
 
-				debugLogProperty_ = serializedObject.FindProperty("debugLog");
-				persistentProperty_ = serializedObject.FindProperty("persistent");
-				variableSaverProperty_ = serializedObject.FindProperty("variableSaver");
-				forceCallbacksProperty_ = serializedObject.FindProperty("forceCallbacks");
+				debugLogProperty_ = serializedObject.FindProperty("DebugLog");
+				persistentProperty_ = serializedObject.FindProperty("Persistent");
+				variableSaverProperty_ = serializedObject.FindProperty("VariableSaver");
+				forceCallbacksProperty_ = serializedObject.FindProperty("ForceCallbacks");
 				InitialValueProperty_ = serializedObject.FindProperty("initialValue");
 				RuntimeValueProperty_ = serializedObject.FindProperty("runtimeValue");
 			}
