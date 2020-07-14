@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SmartVariables;
 
 public class Increment_Smart : MonoBehaviour
 {
