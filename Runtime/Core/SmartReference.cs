@@ -43,7 +43,7 @@ namespace SmartVariables
 		public bool Persistent = false;
 
 		[FormerlySerializedAs("variableSaver")]
-		public SmartVariableSaver VariableSaver;
+		public SmartVariableSaverBase VariableSaver;
 
 		[FormerlySerializedAs("forceCallbacks")]
 		[Tooltip("If true, callbacks will be triggered even if the variable is set to the same value as before")]

@@ -10,11 +10,11 @@ using System.Reflection;
 namespace SmartVariables
 {
     [CreateAssetMenu(menuName = "Variables/Collection", order = -1)]
-    [SubAssetCollection(typeof(SmartReferenceBase), typeof(SmartVariableSaver))]
+    [SubAssetCollection(typeof(SmartReferenceBase), typeof(SmartVariableSaverBase))]
     public class SmartCollection : ScriptableObject
     {
         public List<SmartReferenceBase> variables = new List<SmartReferenceBase>();
-        public SmartVariableSaver variableSaver;
+        public SmartVariableSaverBase variableSaver;
 
         public void OnAssetAddedToCollection(Object asset)
         {
@@ -31,7 +31,7 @@ namespace SmartVariables
                 return;
             }
 
-            SmartVariableSaver addedVariableSaver = asset as SmartVariableSaver;
+            SmartVariableSaverBase addedVariableSaver = asset as SmartVariableSaverBase;
             if (addedVariableSaver != null)
             {
                 if (variableSaver != null)
@@ -56,7 +56,7 @@ namespace SmartVariables
         public void OnAssetRemovedFromCollection(Object asset)
         {
 #if UNITY_EDITOR
-            SmartVariableSaver removedVariableSaver = asset as SmartVariableSaver;
+            SmartVariableSaverBase removedVariableSaver = asset as SmartVariableSaverBase;
             if (removedVariableSaver != null)
             {
                 foreach (SmartReferenceBase variable in variables)

@@ -8,16 +8,15 @@ namespace SmartVariables
 {
     [System.Serializable]
     [CreateAssetMenu(menuName = "Variables/VariableSaver")]
-    public class SmartVariableSaver : ScriptableObject
+    public class SmartVariableSaverSystemIO : SmartVariableSaverBase
     {
         public string pathToSave;
 
-        private HashSet<SmartReferenceBase> queuedVariablesToSave = new HashSet<SmartReferenceBase>();
         private Dictionary<int, object> cachedLoadedVariables = new Dictionary<int, object>();
 
         private bool loaded = false;
 
-        public object GetSavedVariableValue(int variableId)
+        public override object GetSavedVariableValue(int variableId)
         {
             if (!loaded)
             {
@@ -30,11 +29,6 @@ namespace SmartVariables
             }
 
             return null;
-        }
-
-        public void AddVariableToSaveQueue(SmartReferenceBase variable)
-        {
-            queuedVariablesToSave.Add(variable);
         }
 
         public void SaveQueuedVariables()
