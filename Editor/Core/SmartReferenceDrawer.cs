@@ -8,8 +8,8 @@ namespace SmartVariables
 	[CustomPropertyDrawer(typeof(SmartReferenceBase), true)]
 	public class SmartReferenceDrawer : PropertyDrawer
 	{
-		const float standardHeight = 16;
-		const float standardGap = 2;
+		private float standardHeight => EditorGUIUtility.singleLineHeight;
+		private float standardGap => EditorGUIUtility.standardVerticalSpacing;
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
@@ -17,18 +17,30 @@ namespace SmartVariables
 			{
 				return standardHeight;
 			}
+
+			SerializedObject referencedVariable = new SerializedObject(property.objectReferenceValue);
+			SerializedProperty isPersistentProperty = referencedVariable.FindProperty("Persistent");
+			bool isVariablePersistent = isPersistentProperty.boolValue;
+			SerializedProperty value;
+			if (Application.isPlaying || isVariablePersistent)
+			{
+				value = referencedVariable.FindProperty("runtimeValue");
+			}
 			else
 			{
-				SerializedObject serializedObject = new SerializedObject(property.objectReferenceValue);
-				SerializedProperty runtimeValue = serializedObject.FindProperty("runtimeValue");
-				if (runtimeValue.propertyType == SerializedPropertyType.ObjectReference)
-				{
-					return EditorGUI.GetPropertyHeight(runtimeValue) + standardGap;
-				}
-				else
-				{
-					return EditorGUI.GetPropertyHeight(runtimeValue) + standardHeight + standardGap;
-				}
+				value = referencedVariable.FindProperty("initialValue");
+			}
+				
+			if (value == null)
+				return standardHeight;
+				
+			if (value.propertyType == SerializedPropertyType.ObjectReference)
+			{
+				return EditorGUI.GetPropertyHeight(value) + standardGap;
+			}
+			else
+			{
+				return EditorGUI.GetPropertyHeight(value) + standardHeight + standardGap;
 			}
 		}
 
@@ -60,6 +72,12 @@ namespace SmartVariables
 				else
 				{
 					value = referencedVariable.FindProperty("initialValue");
+				}
+
+				if (value == null)
+				{
+					EditorGUI.EndProperty();
+					return;
 				}
 
 				EditorGUI.BeginChangeCheck();

@@ -46,8 +46,10 @@ namespace SmartVariables
 			EditorGUILayout.PropertyField(persistentProperty_);
 			EditorGUILayout.PropertyField(variableSaverProperty_);
 			EditorGUILayout.PropertyField(forceCallbacksProperty_);
-			EditorGUILayout.PropertyField(InitialValueProperty_, true);
-			EditorGUILayout.PropertyField(RuntimeValueProperty_, true);
+			if (InitialValueProperty_ != null)
+				EditorGUILayout.PropertyField(InitialValueProperty_, true);
+			if (RuntimeValueProperty_ != null)
+				EditorGUILayout.PropertyField(RuntimeValueProperty_, true);
 
 			if (EditorGUI.EndChangeCheck() && Application.isPlaying)
 			{
