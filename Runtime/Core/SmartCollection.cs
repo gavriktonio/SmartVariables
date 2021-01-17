@@ -36,8 +36,6 @@ namespace SmartVariables
             {
                 if (variableSaver != null)
                 {
-                    Debug.LogError("Multiple variable savers should not belong to the same collection");
-                    AssetDatabase.RemoveObjectFromAsset(asset);
                 }
                 else
                 {

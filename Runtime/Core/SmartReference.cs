@@ -339,18 +339,17 @@ namespace SmartVariables
 
 		public static implicit operator T(SmartReference<T> smartVar) => smartVar.Value;
 
-		public static T operator *(T var, SmartReference<T> smartVar)
-		{
-			dynamic x = var, y = smartVar.Value;
-			
-			return x * y;
-		}
-
-		public static T operator +(T var, SmartReference<T> smartVar)
-		{
-			dynamic x = var, y = smartVar.Value;
-			return x + y;
-		}
+		//public static T operator *(T var, SmartReference<T> smartVar)
+		//{
+		//	dynamic x = var, y = smartVar.Value;
+		//	return x * y;
+		//}
+//
+		//public static T operator +(T var, SmartReference<T> smartVar)
+		//{
+		//	dynamic x = var, y = smartVar.Value;
+		//	return x + y;
+		//}
 	}
 }
 

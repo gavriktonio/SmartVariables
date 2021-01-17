@@ -7,7 +7,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace SmartVariables
 {
     [System.Serializable]
-    [CreateAssetMenu(menuName = "Variables/VariableSaver")]
     public abstract class SmartVariableSaverBase : ScriptableObject
     {
         protected HashSet<SmartReferenceBase> queuedVariablesToSave = new HashSet<SmartReferenceBase>();
@@ -18,5 +17,9 @@ namespace SmartVariables
         {
             queuedVariablesToSave.Add(variable);
         }
+
+        public virtual void SaveQueuedVariables() { }
+        public virtual void LoadVariables() { }
+
     }
 }

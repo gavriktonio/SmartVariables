@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace SmartVariables
 {
     [System.Serializable]
-    [CreateAssetMenu(menuName = "Variables/VariableSaver")]
+    [CreateAssetMenu(menuName = "Variables/VariableSavers/SystemIO")]
     public class SmartVariableSaverSystemIO : SmartVariableSaverBase
     {
         public string pathToSave;
@@ -31,7 +31,7 @@ namespace SmartVariables
             return null;
         }
 
-        public void SaveQueuedVariables()
+        public override void SaveQueuedVariables()
         {
             if (!loaded)
             {
@@ -74,7 +74,7 @@ namespace SmartVariables
             file.Close();
         }
 
-        private void LoadVariables()
+        public override void LoadVariables()
         {
             string pathAndName = Path.Combine(Application.persistentDataPath, pathToSave);
 
