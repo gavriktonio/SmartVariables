@@ -11,6 +11,7 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
     public SmartVariableSaverBase EditorOsxSaver;
     public SmartVariableSaverBase EditorLinuxSaver;
     public SmartVariableSaverBase WindowsSaver;
+    public SmartVariableSaverBase UWPSaver;
     public SmartVariableSaverBase AndroidSaver;
     public SmartVariableSaverBase SwitchSaver;
     public SmartVariableSaverBase OsxSaver;
@@ -18,6 +19,7 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
     public SmartVariableSaverBase IosSaver;
     public SmartVariableSaverBase Ps4Saver;
     public SmartVariableSaverBase XboxOneSaver;
+    public SmartVariableSaverBase FallbackSaver;
     
     
     public override object GetSavedVariableValue(int variableId)
@@ -44,6 +46,10 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
         return Ps4Saver?.GetSavedVariableValue(variableId);
 #elif UNITY_XBOXONE
         return XboxOneSaver?.GetSavedVariableValue(variableId);
+#elif WINDOWS_UWP
+        return UWPSaver?.GetSavedVariableValue(variableId);
+#else
+        return FallbackSaver?.GetSavedVariableValue(variableId);
 #endif
     }
 
@@ -71,6 +77,10 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
         Ps4Saver?.LoadVariables();
 #elif UNITY_XBOXONE
         XboxOneSaver?.LoadVariables();
+#elif WINDOWS_UWP
+        return UWPSaver?.LoadVariables();
+#else
+        return FallbackSaver?.LoadVariables();
 #endif
     }
 
@@ -98,6 +108,10 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
         Ps4Saver?.SaveQueuedVariables();
 #elif UNITY_XBOXONE
         XboxOneSaver?.SaveQueuedVariables();
+#elif WINDOWS_UWP
+        return UWPSaver?.SaveQueuedVariables();
+#else
+        return FallbackSaver?.SaveQueuedVariables();
 #endif
     }
 
@@ -125,6 +139,10 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
         Ps4Saver?.AddVariableToSaveQueue(variable);
 #elif UNITY_XBOXONE
         XboxOneSaver?.AddVariableToSaveQueue(variable);
+#elif WINDOWS_UWP
+        return UWPSaver?.AddVariableToSaveQueue(variable);
+#else
+        return FallbackSaver?.AddVariableToSaveQueue(variable);
 #endif
     }
 }
