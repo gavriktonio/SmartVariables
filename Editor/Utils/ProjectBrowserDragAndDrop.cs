@@ -32,7 +32,7 @@ class ProjectBrowserDragAndDrop
     static FieldInfo draggedOntoId;
     static Assembly editorAssembly = typeof(Editor).Assembly;
     static Type dragAndDropServiceType = editorAssembly.GetType("UnityEditor.DragAndDropService");
-    static MethodInfo defaultDragDropMethod = dragAndDropServiceType.GetMethod("DefaultProjectBrowserDropHandler", BindingFlags.Static | BindingFlags.NonPublic);
+    static MethodInfo defaultDragDropMethod = dragAndDropServiceType?.GetMethod("DefaultProjectBrowserDropHandler", BindingFlags.Static | BindingFlags.NonPublic);
 
     static ProjectBrowserDragAndDrop()
     {

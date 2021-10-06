@@ -34,12 +34,10 @@ namespace SmartVariables
 {
 	public abstract class SmartReferenceBase : ScriptableObject
 	{
-		[FormerlySerializedAs("debugLog")]
-		[Tooltip("Log all the changes, happening to this variable")]
+		[FormerlySerializedAs("debugLog")] [Tooltip("Log all the changes, happening to this variable")]
 		public bool DebugLog = false;
 
-		[FormerlySerializedAs("persistent")]
-		[Tooltip("If true, the runtime value will persist between play sessions")]
+		[FormerlySerializedAs("persistent")] [Tooltip("If true, the runtime value will persist between play sessions")]
 		public bool Persistent = false;
 
 		[FormerlySerializedAs("variableSaver")]
@@ -74,7 +72,7 @@ namespace SmartVariables
 
 		private VariableSetEvent listeners;
 
-		//If a value set is called when a value set is already taking place, 
+		//If a value set is called when a value set is already taking place,
 		//we need to finish calling all the listeners before setting the new value.
 		//Therefore, we store the new set value in a queue until all the listeners are done.
 
@@ -83,7 +81,9 @@ namespace SmartVariables
 		private bool settingInProgress = false;
 		private T lastQueued;
 
-		public void OnBeforeSerialize() { }
+		public void OnBeforeSerialize()
+		{
+		}
 
 		void OnEnable()
 		{
@@ -107,7 +107,7 @@ namespace SmartVariables
                     return;
                 }
             }
-            //If can't find saved value, reset to initial 
+            //If can't find saved value, reset to initial
             ResetRuntimeValue();
             if (DebugLog)
             {
@@ -236,7 +236,7 @@ namespace SmartVariables
 		}
 
 		//Gets called from the editor before inspector modifies the values.
-		//Because the old values are gone after the change, 
+		//Because the old values are gone after the change,
 		//we save them in the setQueue.
 		public override void PrepareEditorCallbacks()
 		{
@@ -250,7 +250,7 @@ namespace SmartVariables
 		}
 
 		//Gets called after the editor inspector modifies the values.
-		//We take the values back from the queue, and make sure that 
+		//We take the values back from the queue, and make sure that
 		//The listeners get invoked.
 		public override void InvokeEditorCallbacks()
 		{
@@ -337,19 +337,21 @@ namespace SmartVariables
 			}
 		}
 
-		public static implicit operator T(SmartReference<T> smartVar) => smartVar.Value;
+		public static implicit operator T(SmartReference<T> smartVar)
+		{
+			if (smartVar == null)
+			{
+				Debug.LogError("Trying to get a value from a null variable!");
+				return default(T);
+			}
 
-		//public static T operator *(T var, SmartReference<T> smartVar)
-		//{
-		//	dynamic x = var, y = smartVar.Value;
-		//	return x * y;
-		//}
-//
-		//public static T operator +(T var, SmartReference<T> smartVar)
-		//{
-		//	dynamic x = var, y = smartVar.Value;
-		//	return x + y;
-		//}
+			return smartVar.Value;
+		}
+
+		public static T operator *(T var, SmartReference<T> smartVar)
+		{
+			dynamic x = var, y = smartVar.Value;
+			return x * y;
+		}
 	}
 }
-
