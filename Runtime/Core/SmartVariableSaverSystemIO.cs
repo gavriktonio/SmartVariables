@@ -88,6 +88,11 @@ namespace SmartVariables
             else
             {
                 Debug.LogWarning("Saved variables file not found, creating new file: " + pathAndName);
+                string fullPath = Path.GetDirectoryName(pathAndName);
+                if (!Directory.Exists(fullPath))
+                {
+                    Directory.CreateDirectory(fullPath);
+                }
                 file = File.Create(pathAndName);
                 bf.Serialize(file, 0);
                 file.Close();
