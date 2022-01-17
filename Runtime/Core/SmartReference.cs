@@ -116,7 +116,8 @@ namespace SmartVariables
         }
 #endif
 		}
-
+		public int ValueChangesInQueue => setQueue == null ? 0 : setQueue.Count;
+		
 		//Gets called when a game starts, as well as when changing the value from the editor
 		public void OnAfterDeserialize()
 		{
