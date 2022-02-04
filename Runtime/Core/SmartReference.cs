@@ -156,10 +156,9 @@ namespace SmartVariables
 				//Only change the value if
 				if (
 					//It's not the same as the current one and no changes are queued
-					((settingInProgress == false || (setQueue == null || setQueue.Count == 0)) &&
-					 !value.Equals(runtimeValue)) ||
+					(settingInProgress == false || setQueue == null || setQueue.Count == 0) && !EqualityComparer<T>.Default.Equals(runtimeValue, value) ||
 					//More changes are queued up and it's not the same as the last queued
-					(setQueue != null && setQueue.Count > 0 && !value.Equals(lastQueued)) ||
+					setQueue != null && setQueue.Count > 0 && !EqualityComparer<T>.Default.Equals(lastQueued, value) ||
 					//Force callbacks option is on
 					ForceCallbacks)
 				{
