@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -16,7 +15,7 @@ public class SubAssetDragAndDrop
 
     internal static DragAndDropVisualMode CustomProjectBrowserDropHandler(int draggedUponID, string draggedUponPath, bool perform)
     {
-        System.Type draggedOntoAssetType = AssetDatabase.GetMainAssetTypeAtPath(draggedUponPath);
+        Type draggedOntoAssetType = AssetDatabase.GetMainAssetTypeAtPath(draggedUponPath);
         SubAssetCollection collectionAttribute = null;
 
         if (draggedOntoAssetType != null)

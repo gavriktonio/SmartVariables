@@ -100,7 +100,7 @@ namespace SmartVariables
             }
 
 
-            int variablesCount = (int) bf.Deserialize(file);
+            int variablesCount = (int)bf.Deserialize(file);
 
             for (int i = 0; i < variablesCount; i++)
             {
@@ -108,7 +108,7 @@ namespace SmartVariables
                 object deserializedObject;
                 try
                 {
-                    deserializedId = (int) bf.Deserialize(file);
+                    deserializedId = (int)bf.Deserialize(file);
                     deserializedObject = bf.Deserialize(file);
                 }
                 catch (System.SystemException e)

@@ -79,7 +79,7 @@ namespace SmartVariables
 
 #if UNITY_EDITOR
 //Here to fix a unity bug https://issuetracker.unity3d.com/issues/parent-and-child-nested-scriptable-object-assets-switch-places-when-parent-scriptable-object-asset-is-renamed
-    public class CustomAssetModificationProcessor : UnityEditor.AssetModificationProcessor
+    public class CustomAssetModificationProcessor : AssetModificationProcessor
     {
         static private bool isWithinRename = false;
 

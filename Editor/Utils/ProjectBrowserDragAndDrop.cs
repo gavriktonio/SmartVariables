@@ -26,7 +26,7 @@ class ProjectBrowserDragAndDrop
         customDragAndDropHandlers.Remove(dropHandler);
     }
 
-    private static List<ProjectBrowserDropHandler> customDragAndDropHandlers = new List<ProjectBrowserDropHandler>(); 
+    private static List<ProjectBrowserDropHandler> customDragAndDropHandlers = new List<ProjectBrowserDropHandler>();
 
 
     static FieldInfo draggedOntoId;
@@ -40,7 +40,7 @@ class ProjectBrowserDragAndDrop
         Type projectBrowserDropHandler = dragAndDropServiceType.GetNestedType("ProjectBrowserDropHandler");
 
         MethodInfo handlerMethodInfo = typeof(ProjectBrowserDragAndDrop).GetMethod("CustomProjectBrowserDropHandler", BindingFlags.Static | BindingFlags.NonPublic);
-        System.Delegate delegateTest = System.Delegate.CreateDelegate(projectBrowserDropHandler, handlerMethodInfo);
+        Delegate delegateTest = System.Delegate.CreateDelegate(projectBrowserDropHandler, handlerMethodInfo);
 
         MethodInfo methodInfo = dragAndDropServiceType.GetMethod("AddDropHandler", new Type[] { projectBrowserDropHandler });
         methodInfo.Invoke(null, new object[] { delegateTest });

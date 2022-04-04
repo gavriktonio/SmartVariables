@@ -20,8 +20,8 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
     public SmartVariableSaverBase Ps4Saver;
     public SmartVariableSaverBase XboxOneSaver;
     public SmartVariableSaverBase FallbackSaver;
-    
-    
+
+
     public override object GetSavedVariableValue(int variableId)
     {
 #if UNITY_EDITOR_OSX
