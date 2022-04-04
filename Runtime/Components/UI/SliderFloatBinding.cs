@@ -36,7 +36,7 @@ namespace SmartVariables
         {
             if (newValue > slider.maxValue || newValue < slider.minValue)
             {
-                Debug.LogWarning("Float variable is trying to set the slider out of the slider values range!");
+                SmartLogger.LogWarning("Float variable is trying to set the slider out of the slider values range!");
             }
 
             slider.value = newValue;
@@ -46,12 +46,12 @@ namespace SmartVariables
         {
             if (slider == null)
             {
-                Debug.LogError("A slider component needs to be attached to this gameObject!");
+                SmartLogger.LogError("A slider component needs to be attached to this gameObject!");
             }
 
             if (floatVariable == null)
             {
-                Debug.LogError("A variable is not assigned to use with this slider!");
+                SmartLogger.LogError("A variable is not assigned to use with this slider!");
             }
         }
     }

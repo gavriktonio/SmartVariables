@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 
 namespace SmartVariables
 {
@@ -8,7 +9,12 @@ namespace SmartVariables
     [CustomEditor(typeof(SmartReferenceBase), true)]
     public class SmartReferenceEditor : Editor
     {
+        protected SerializedProperty overrideGlobalLogLevelProperty_;
+        protected SerializedProperty logLevelProperty_;
+
+        [Obsolete]
         protected SerializedProperty debugLogProperty_;
+
         protected SerializedProperty persistentProperty_;
         protected SerializedProperty variableSaverProperty_;
         protected SerializedProperty forceCallbacksProperty_;
@@ -26,12 +32,20 @@ namespace SmartVariables
                     return;
                 }
 
-                debugLogProperty_ = serializedObject.FindProperty("DebugLog");
+                overrideGlobalLogLevelProperty_ = serializedObject.FindProperty("OverrideGlobalLogLevel");
+                logLevelProperty_ = serializedObject.FindProperty("LogLevel");
+
                 persistentProperty_ = serializedObject.FindProperty("Persistent");
                 variableSaverProperty_ = serializedObject.FindProperty("VariableSaver");
                 forceCallbacksProperty_ = serializedObject.FindProperty("ForceCallbacks");
                 InitialValueProperty_ = serializedObject.FindProperty("initialValue");
                 RuntimeValueProperty_ = serializedObject.FindProperty("runtimeValue");
+
+                SerializedProperty debugLogProperty = serializedObject.FindProperty("DebugLog");
+                if (debugLogProperty != null && debugLogProperty.boolValue)
+                {
+                    overrideGlobalLogLevelProperty_.boolValue = true;
+                }
             }
             catch { }
         }
@@ -42,7 +56,11 @@ namespace SmartVariables
             serializedObject.Update();
             EditorGUI.BeginChangeCheck();
 
-            EditorGUILayout.PropertyField(debugLogProperty_);
+            EditorGUILayout.PropertyField(overrideGlobalLogLevelProperty_);
+
+            if (overrideGlobalLogLevelProperty_.boolValue)
+                EditorGUILayout.PropertyField(logLevelProperty_);
+
             EditorGUILayout.PropertyField(persistentProperty_);
             EditorGUILayout.PropertyField(variableSaverProperty_);
             EditorGUILayout.PropertyField(forceCallbacksProperty_);
@@ -95,7 +113,11 @@ namespace SmartVariables
                 EditorGUILayout.PropertyField(InitialValueProperty_, true);
             }
 
-            EditorGUILayout.PropertyField(debugLogProperty_);
+            EditorGUILayout.PropertyField(overrideGlobalLogLevelProperty_);
+
+            if (overrideGlobalLogLevelProperty_.boolValue)
+                EditorGUILayout.PropertyField(logLevelProperty_);
+
             EditorGUILayout.PropertyField(forceCallbacksProperty_);
 
             if (EditorGUI.EndChangeCheck() && Application.isPlaying)

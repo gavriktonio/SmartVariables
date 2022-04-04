@@ -9,14 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f8538a03e67df4ea10149fde2fb6f6, type: 3}
-  m_Name: New Bool Reference
+  m_Script: {fileID: 11500000, guid: 3aebd7496ae0b0c45835069fd468d26a, type: 3}
+  m_Name: SmartLoggerSettings
   m_EditorClassIdentifier: 
-  OverrideGlobalLogLevel: 0
-  LogLevel: 4
-  DebugLog: 0
-  Persistent: 0
-  VariableSaver: {fileID: 0}
-  ForceCallbacks: 0
-  initialValue: 0
-  runtimeValue: 0

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -34,8 +35,15 @@ namespace SmartVariables
 {
     public abstract class SmartReferenceBase : ScriptableObject
     {
+        [Tooltip("Set to true to ignore the global log level and set your own.")]
+        public bool OverrideGlobalLogLevel = false;
+
+        [Tooltip("Set log level for this variable")]
+        public LogLevel LogLevel = LogLevel.Off;
+
         [FormerlySerializedAs("debugLog")]
         [Tooltip("Log all the changes, happening to this variable")]
+        [Obsolete]
         public bool DebugLog = false;
 
         [FormerlySerializedAs("persistent")]
@@ -49,6 +57,21 @@ namespace SmartVariables
         [Tooltip("If true, callbacks will be triggered even if the variable is set to the same value as before")]
         public bool ForceCallbacks = false;
 
+        private Logger _logger = null;
+        protected Logger Logger
+        {
+            get
+            {
+                if (_logger == null)
+                    _logger = new Logger() { Prefix = "[SmartReference]: " };
+
+                if (OverrideGlobalLogLevel)
+                    _logger.LogLevel = LogLevel;
+
+                return _logger;
+            }
+        }
+
         public abstract void PrepareEditorCallbacks();
         public abstract void InvokeEditorCallbacks();
 
@@ -61,7 +84,7 @@ namespace SmartVariables
         public abstract void RemoveAllListeners();
     }
 
-    [System.Serializable]
+    [Serializable]
     public class SmartReference<T> : SmartReferenceBase, ISerializationCallbackReceiver
     {
         [SerializeField] private T initialValue;
@@ -82,6 +105,7 @@ namespace SmartVariables
         private Queue<T> setQueue = null;
         private bool settingInProgress = false;
         private T lastQueued;
+        public int ValueChangesInQueue => setQueue == null ? 0 : setQueue.Count;
 
         public void OnBeforeSerialize()
         {
@@ -89,10 +113,8 @@ namespace SmartVariables
 
         void OnEnable()
         {
-            if (DebugLog)
-            {
-                Debug.Log("SmartReference: " + name + " OnEnable: ");
-            }
+            Logger.LogDebug("Running OnEnable for '{0}'...", name);
+
 #if !UNITY_EDITOR
             if (Persistent)
             {
@@ -102,36 +124,32 @@ namespace SmartVariables
                     if (savedValue != null)
                     {
                         SetRuntimeValueFromObject(savedValue);
-                        if (DebugLog)
-                        {
-                            Debug.Log("SmartReference: " + name + " persistent value was loaded OnEnable: " + Value);
-                        }
+
+                        Logger.LogInfo("Value on '{0}' was set to '{1}' from persistent storage.", name, Value);
                         return;
                     }
                 }
                 //If can't find saved value, reset to initial
                 ResetRuntimeValue();
-                if (DebugLog)
-                {
-                    Debug.Log("SmartReference: " + name + " persistent value could not be loaded, reset to initial: " + Value);
-                }
+
+                Logger.LogWarning("Persistent value could not be loaded for '{0}', reset to initial value: '{1}'", name, Value);
             }
 #endif
         }
-        public int ValueChangesInQueue => setQueue == null ? 0 : setQueue.Count;
 
         //Gets called when a game starts, as well as when changing the value from the editor
         public void OnAfterDeserialize()
         {
-            if (DebugLog)
+            //It's not possible to use .name in OnAfterDeserialize
+            if (LogLevel == LogLevel.Debug)
             {
-                //It's not possible to use .name in OnAfterDeserialize
-                Debug.Log("SmartReference: _________ after deserialize");
+                Debug.Log("Running after deserialize...");
+
                 if (setQueue != null && setQueue.Count < 1)
                 {
-                    Debug.Log(
-                        "SmartReference: _________ queue not clear after deserialize. This should happen only when the value gets changed from the editor. Queue count: " +
-                        setQueue.Count);
+                    Debug.LogWarningFormat(
+                        "_________ queue not clear after deserialize. This should happen only when the value gets changed from the editor. Queue count: {0}"
+                        , setQueue.Count);
                 }
             }
 
@@ -174,20 +192,12 @@ namespace SmartVariables
 
                         setQueue.Enqueue(value);
                         lastQueued = value;
-                        if (DebugLog)
-                        {
-                            Debug.Log("SmartReference: " + name + " queued up a new value to set: " + value.ToString() +
-                                      ". queue length: " + setQueue.Count);
-                        }
+                        Logger.LogDebug("{0} queued up a new value to set: '{1}'. Queue length: {2}", name, value.ToString(), setQueue.Count);
 
                         return;
                     }
 
-                    if (DebugLog)
-                    {
-                        Debug.Log("SmartReference: " + name + " is being set from " + runtimeValue + " to " +
-                                  value.ToString());
-                    }
+                    Logger.Log("{0} is being set from '{1}' to '{2}'", name, runtimeValue, value.ToString());
 
                     settingInProgress = true;
 
@@ -196,11 +206,7 @@ namespace SmartVariables
 
                     if (VariableSaver != null)
                     {
-                        if (DebugLog)
-                        {
-                            Debug.Log("SmartReference: " + name + " with value " + value.ToString() +
-                                      " is being queued to save with variable saver " + VariableSaver.name);
-                        }
+                        Logger.LogDebug("{0} with value '{1}' is being queued to save with variable saver '{2}'.", name, value.ToString(), VariableSaver.name);
 
                         VariableSaver.AddVariableToSaveQueue(this);
                     }
@@ -216,10 +222,7 @@ namespace SmartVariables
                     //If so, call the function recursively to set the queued up value
                     if (setQueue != null && setQueue.Count > 0)
                     {
-                        if (DebugLog)
-                        {
-                            Debug.Log("SmartReference: " + name + " dequeued a value: " + setQueue.Peek());
-                        }
+                        Logger.LogDebug("{0} dequeued a value: {1}", name, setQueue.Peek());
 
                         T newValue = setQueue.Dequeue();
                         this.Value = (newValue);
@@ -227,12 +230,8 @@ namespace SmartVariables
                 }
                 else
                 {
-                    if (DebugLog)
-                    {
-                        Debug.Log("SmartReference: " + name +
-                                  " value set to " + value +
-                                  " regected. It's the same as the previous one. If callbacks should still work in this case, turn on the force callbacks option in the variable ");
-                    }
+                    Logger.LogWarning("{0} value set to {1} rejected. It's the same as the previous one. If callbacks should still work in this case, turn on the force callbacks option in the variable.",
+                              name, value);
                 }
             }
         }
@@ -295,40 +294,28 @@ namespace SmartVariables
 
         public override void ResetRuntimeValue()
         {
-            if (DebugLog)
-            {
-                Debug.Log("SmartReference: " + name + " ResetRuntimeValue");
-            }
+            Logger.LogDebug("{0} ResetRuntimeValue", name);
 
             runtimeValue = initialValue;
         }
 
         public void AddListener(VariableSetEvent listener)
         {
-            if (DebugLog)
-            {
-                Debug.Log("SmartReference: " + name + " AddListener");
-            }
+            Logger.LogDebug("{0} AddListener", name);
 
             listeners += listener;
         }
 
         public void RemoveListener(VariableSetEvent listener)
         {
-            if (DebugLog)
-            {
-                Debug.Log("SmartReference: " + name + " RemoveListener");
-            }
+            Logger.LogDebug("{0} RemoveListener", name);
 
             listeners -= listener;
         }
 
         public override void RemoveAllListeners()
         {
-            if (DebugLog)
-            {
-                Debug.Log("SmartReference: " + name + " RemoveAllListeners");
-            }
+            Logger.LogDebug("{0} RemoveAllListeners", name);
 
             if (listeners != null)
             {
@@ -343,7 +330,7 @@ namespace SmartVariables
         {
             if (smartVar == null)
             {
-                Debug.LogError("Trying to get a value from a null variable!");
+                SmartLogger.LogError("Trying to get a value from a null variable!");
                 return default(T);
             }
 

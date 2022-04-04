@@ -13,7 +13,9 @@ namespace SmartVariables
     }
 
     [System.Serializable]
-    public abstract class SmartVariableBase { }
+    public abstract class SmartVariableBase
+    {
+    }
 
 
     [System.Serializable]
@@ -29,6 +31,21 @@ namespace SmartVariables
             set { reference = value; }
         }
 
+        private Logger _logger = null;
+        protected Logger Logger
+        {
+            get
+            {
+                if (_logger == null)
+                    _logger = new Logger() { Prefix = "[SmartVariable]: " };
+
+                if (Reference.OverrideGlobalLogLevel)
+                    _logger.LogLevel = Reference.LogLevel;
+
+                return _logger;
+            }
+        }
+
         //only valid when the Type is constant
         public T runtimeValue;
 
@@ -40,7 +57,7 @@ namespace SmartVariables
                     Reference.AddListener(listener);
                     break;
                 default:
-                    Debug.LogWarning("Trying to listen for unsupported Type variable changes");
+                    Logger.LogWarning("Trying to listen for unsupported Type variable changes");
                     break;
             }
         }
@@ -53,7 +70,7 @@ namespace SmartVariables
                     Reference.RemoveListener(listener);
                     break;
                 default:
-                    Debug.LogWarning("SmartVariable: Trying to listen for unsupported Type variable changes");
+                    Logger.LogWarning("Trying to listen for unsupported Type variable changes");
                     break;
             }
         }
@@ -69,14 +86,13 @@ namespace SmartVariables
                     case VarType.Reference:
                         if (Reference == null)
                         {
-                            Debug.LogError("SmartVariable: Variable Reference not set");
+                            Logger.LogError("Variable Reference not set.");
                             return default(T);
                         }
 
                         return Reference.Value;
                     default:
-                        Debug.LogError("SmartVariable: INVALID TYPE VARIABLE");
-                        Debug.Log(Type);
+                        Logger.LogError("INVALID TYPE VARIABLE! Type is: {0}", Type);
                         return default(T);
                 }
             }
@@ -88,11 +104,11 @@ namespace SmartVariables
                         runtimeValue = value;
                         break;
                     case VarType.Reference:
-                        UnityEngine.Assertions.Assert.IsNotNull(Reference, "SmartVariable: No Reference assigned!");
+                        UnityEngine.Assertions.Assert.IsNotNull(Reference, "[SmartVariable]: No Reference assigned!");
                         Reference.Value = value;
                         break;
                     default:
-                        Debug.LogError("SmartVariable: INVALID TYPE VARIABLE");
+                        Logger.LogError("INVALID TYPE VARIABLE!");
                         break;
                 }
             }

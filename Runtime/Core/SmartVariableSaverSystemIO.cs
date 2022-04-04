@@ -87,7 +87,7 @@ namespace SmartVariables
             }
             else
             {
-                Debug.LogWarning("Saved variables file not found, creating new file: " + pathAndName);
+                SmartLogger.LogWarning("Saved variables file not found, creating new file: {0}", pathAndName);
                 string fullPath = Path.GetDirectoryName(pathAndName);
                 if (!Directory.Exists(fullPath))
                 {
@@ -113,7 +113,7 @@ namespace SmartVariables
                 }
                 catch (System.SystemException e)
                 {
-                    Debug.LogWarning("Error reading from" + pathAndName + ". Message = " + e.Message);
+                    SmartLogger.LogWarning("Error reading from '{0}'. Message = {1}", pathAndName, e.Message);
                     break;
                 }
 

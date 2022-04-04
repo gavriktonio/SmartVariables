@@ -38,12 +38,12 @@ namespace SmartVariables
         {
             if (toggle == null)
             {
-                Debug.LogError("A toggle component needs to be attached to this gameObject!");
+                SmartLogger.LogError("A toggle component needs to be attached to this gameObject!");
             }
 
             if (boolean == null)
             {
-                Debug.LogError("A boolean variable is not assigned to use with this toggle!");
+                SmartLogger.LogError("A boolean variable is not assigned to use with this toggle!");
             }
         }
     }

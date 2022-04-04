@@ -34,12 +34,12 @@ namespace SmartVariables
         {
             if (text == null && textTMPro == null)
             {
-                Debug.LogError("A text component or TMProText component needs to be attached to this gameObject!");
+                SmartLogger.LogError("A text component or TMProText component needs to be attached to this gameObject!");
             }
 
             if (variable == null)
             {
-                Debug.LogError("A variable is not assigned to set the text from!");
+                SmartLogger.LogError("A variable is not assigned to set the text from!");
             }
         }
     }
