@@ -1,10 +1,16 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace SmartVariables
 {
     public class SmartLoggerSettings : ScriptableObject
     {
+        public const string assetPath = "Assets/UserSettings/SmartVariablesSettings.asset";
+
         public LogLevel GlobalLogLevel = LogLevel.Warning;
         public bool IgnoreOverrides = false;
 
@@ -15,42 +21,61 @@ namespace SmartVariables
             get
             {
                 if (_Config == null)
-                    _Config = GetConfig();
+                    _Config = GetOrCreateSettings();
                 return _Config;
             }
         }
 
-        private static SmartLoggerSettings GetConfig()
+#if UNITY_EDITOR
+        private static SmartLoggerSettings GetOrCreateSettings()
         {
-            string path = "SmartVariables/";
-            var config = Resources.Load<SmartLoggerSettings>(path);
-
-            if (config == null)
+            var settings = AssetDatabase.LoadAssetAtPath<SmartLoggerSettings>(assetPath);
+            if (settings == null)
             {
-                Debug.LogErrorFormat("Smart Variable Config not found in {0} Resources folder. Will use default.", path);
+                settings = CreateInstance<SmartLoggerSettings>();
 
-                config = (SmartLoggerSettings)CreateInstance("SmartLoggerSettings");
+                Directory.CreateDirectory(Path.GetDirectoryName(assetPath));
+                AssetDatabase.CreateAsset(settings, assetPath);
+                AssetDatabase.SaveAssets();
+            }
+            return settings;
+        }
+
+#else
+        private static SmartLoggerSettings GetOrCreateSettings()
+        {
+            return CreateInstance<SmartLoggerSettings>();
+        }
+#endif
+    }
 
 #if UNITY_EDITOR
-                string pathToFolder = "Assets/SmartVariables/Resources/";
-                string filename = "SmartLoggerSettings.asset";
-
-                if (!System.IO.Directory.Exists(Application.dataPath + "/../" + pathToFolder))
+    // Register a SettingsProvider using IMGUI for the drawing framework:
+    static class SmartLoggerSettingsIMGUIRegister
+    {
+        [SettingsProvider]
+        public static SettingsProvider CreateSmartLoggerSettingsProvider()
+        {
+            // First parameter is the path in the Settings window.
+            // Second parameter is the scope of this setting: it only appears in the User Settings window.
+            var provider = new SettingsProvider("Project/SmartVariables", SettingsScope.User)
+            {
+                // By default the last token of the path is used as display name if no label is provided.
+                label = "Smart Variables",
+                // Create the SettingsProvider and initialize its drawing (IMGUI) function in place:
+                guiHandler = (searchContext) =>
                 {
-                    System.IO.Directory.CreateDirectory(pathToFolder);
-                    UnityEditor.AssetDatabase.ImportAsset(pathToFolder);
-                }
+                    var settings = new SerializedObject(SmartLoggerSettings.Config);
+                    EditorGUILayout.PropertyField(settings.FindProperty("GlobalLogLevel"), new GUIContent("Global Log Level"));
+                    EditorGUILayout.PropertyField(settings.FindProperty("IgnoreOverrides"), new GUIContent("Ignore Overrides"));
+                },
 
-                if (!System.IO.File.Exists(Application.dataPath + "/../" + pathToFolder + "/" + filename))
-                {
-                    UnityEditor.AssetDatabase.CreateAsset(config, pathToFolder + "/" + filename);
-                }
-                UnityEditor.AssetDatabase.SaveAssets();
-#endif
-            }
+                // Populate the search keywords to enable smart search filtering and label highlighting:
+                keywords = new HashSet<string>(new[] { "SmartVariables", "Log" })
+            };
 
-            _Config = config;
-            return config;
+            return provider;
         }
     }
+#endif
 }
