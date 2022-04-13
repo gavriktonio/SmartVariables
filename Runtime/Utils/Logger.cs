@@ -33,10 +33,8 @@ namespace SmartVariables
             if (LogLevel < LogLevel.Debug)
                 return;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.LogFormat(Prefix + format, args);
-#else
-            Console.WriteLine(string.format(format, args));
 #endif
         }
 
@@ -45,10 +43,8 @@ namespace SmartVariables
             if (LogLevel < LogLevel.Info)
                 return;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.LogFormat(Prefix + format, args);
-#else
-            Console.WriteLine(string.format(format, args));
 #endif
         }
 
@@ -57,10 +53,8 @@ namespace SmartVariables
             if (LogLevel < LogLevel.Warning)
                 return;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.LogWarningFormat(Prefix + format, args);
-#else
-            Console.WriteLine(string.format(format, args));
 #endif
         }
 
@@ -69,10 +63,8 @@ namespace SmartVariables
             if (LogLevel < LogLevel.Error)
                 return;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             Debug.LogErrorFormat(Prefix + format, args);
-#else
-            Console.Error.WriteLine(string.format(format, args));
 #endif
         }
     }

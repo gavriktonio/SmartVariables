@@ -125,7 +125,7 @@ namespace SmartVariables
                     {
                         SetRuntimeValueFromObject(savedValue);
 
-                        Logger.LogInfo("Value on '{0}' was set to '{1}' from persistent storage.", name, Value);
+                        Logger.LogDebug("Value on '{0}' was set to '{1}' from persistent storage.", name, Value);
                         return;
                     }
                 }

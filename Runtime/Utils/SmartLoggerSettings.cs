@@ -11,7 +11,7 @@ namespace SmartVariables
     {
         public const string assetPath = "Assets/UserSettings/SmartVariablesSettings.asset";
 
-        public LogLevel GlobalLogLevel = LogLevel.Warning;
+        public LogLevel GlobalLogLevel = LogLevel.Off;
         public bool IgnoreOverrides = false;
 
 
