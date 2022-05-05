@@ -87,6 +87,17 @@ namespace SmartVariables
     [Serializable]
     public class SmartReference<T> : SmartReferenceBase, ISerializationCallbackReceiver
     {
+        private bool initialized = false;
+
+        protected virtual void Init()
+        {
+            if (initialized)
+                return;
+            Logger.LogDebug("Running Init for '{0}'...", name);
+            initialized = true;
+        }
+        
+        
         [SerializeField] private T initialValue;
 
         //Needs to be serialized to be accessible from the inspector
@@ -114,7 +125,6 @@ namespace SmartVariables
         void OnEnable()
         {
             Logger.LogDebug("Running OnEnable for '{0}'...", name);
-
 #if !UNITY_EDITOR
             if (Persistent)
             {
@@ -135,6 +145,7 @@ namespace SmartVariables
                 Logger.LogWarning("Persistent value could not be loaded for '{0}', reset to initial value: '{1}'", name, Value);
             }
 #endif
+            Init();
         }
 
         //Gets called when a game starts, as well as when changing the value from the editor
@@ -170,7 +181,12 @@ namespace SmartVariables
 
         public T Value
         {
-            get { return runtimeValue; }
+            get
+            {
+                if (!initialized)
+                    Init();
+                return runtimeValue;
+            }
             set
             {
                 //Only change the value if
