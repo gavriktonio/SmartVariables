@@ -124,7 +124,6 @@ namespace SmartVariables
 
         void OnEnable()
         {
-            initialized = false;
             Logger.LogDebug("Running OnEnable for '{0}'...", name);
 #if !UNITY_EDITOR
             if (Persistent)
