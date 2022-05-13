@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,14 +18,17 @@ namespace SmartVariables
 
             slider.onValueChanged.AddListener(OnSliderValueChanged);
             floatVariable.AddListener(OnFloatChanged);
-
-            OnFloatChanged(0, floatVariable.Value);
         }
 
         private void OnDisable()
         {
             slider.onValueChanged.RemoveListener(OnSliderValueChanged);
             floatVariable.RemoveListener(OnFloatChanged);
+        }
+
+        private void Start()
+        {
+            OnFloatChanged(0, floatVariable.Value);
         }
 
         void OnSliderValueChanged(float newValue)
