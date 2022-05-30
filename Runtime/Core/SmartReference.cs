@@ -192,12 +192,12 @@ namespace SmartVariables
 
                         setQueue.Enqueue(value);
                         lastQueued = value;
-                        Logger.LogDebug("{0} queued up a new value to set: '{1}'. Queue length: {2}", name, value.ToString(), setQueue.Count);
+                        Logger.LogDebug("{0} queued up a new value to set: '{1}'. Queue length: {2}", name, value == null ? "null" : value.ToString(), setQueue.Count);
 
                         return;
                     }
 
-                    Logger.Log("{0} is being set from '{1}' to '{2}'", name, runtimeValue, value.ToString());
+                    Logger.Log("{0} is being set from '{1}' to '{2}'", name, runtimeValue, value == null ? "null" : value.ToString());
 
                     settingInProgress = true;
 
@@ -206,7 +206,7 @@ namespace SmartVariables
 
                     if (VariableSaver != null)
                     {
-                        Logger.LogDebug("{0} with value '{1}' is being queued to save with variable saver '{2}'.", name, value.ToString(), VariableSaver.name);
+                        Logger.LogDebug("{0} with value '{1}' is being queued to save with variable saver '{2}'.", name, value == null ? "null" : value.ToString(), VariableSaver.name);
 
                         VariableSaver.AddVariableToSaveQueue(this);
                     }
@@ -274,7 +274,7 @@ namespace SmartVariables
 
         public override string ValueAsString()
         {
-            return Value.ToString();
+            return Value == null ? "null" : Value.ToString();
         }
 
         public override object GetValueAsObject()
