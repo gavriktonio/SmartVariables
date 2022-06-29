@@ -12,7 +12,7 @@ namespace SmartVariables
     [System.Obsolete("DecoupleReferences is obsolete. Use local collection instead")]
     public class DecoupleReferences : MonoBehaviour
     {
-        public SmartReferenceBase[] toDecouple;
+        public ScriptableObject[] toDecouple;
 
         private void Awake()
         {
@@ -24,15 +24,15 @@ namespace SmartVariables
                 x.GetType() == typeof(DecoupleReferences)
             );
 
-            foreach (SmartReferenceBase referenceToDecouple in toDecouple)
+            foreach (ScriptableObject referenceToDecouple in toDecouple)
             {
                 Decouple(referenceToDecouple, components);
             }
         }
 
-        private void Decouple(SmartReferenceBase toDecouple, List<Component> components)
+        private void Decouple(ScriptableObject toDecouple, List<Component> components)
         {
-            SmartReferenceBase copied = Instantiate(toDecouple);
+            ScriptableObject copied = Instantiate(toDecouple);
 
             foreach (Component component in components)
             {
