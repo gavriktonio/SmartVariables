@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine.Serialization;
 
 namespace SmartVariables
 {
@@ -10,7 +11,7 @@ namespace SmartVariables
     [CreateAssetMenu(menuName = "Variables/VariableSavers/SystemIO")]
     public class SmartVariableSaverSystemIO : SmartVariableSaverBase
     {
-        public string pathToSave;
+        public SmartString[] PathToSave;
 
         private Dictionary<int, object> cachedLoadedVariables = new Dictionary<int, object>();
 
@@ -46,6 +47,12 @@ namespace SmartVariables
 
             queuedVariablesToSave.Clear();
 
+            string pathToSave = "";
+            foreach (SmartString pathPart in PathToSave)
+            {
+                pathToSave = Path.Combine(pathToSave, pathPart.Value);
+            }
+            
             string pathAndName = Path.Combine(Application.persistentDataPath, pathToSave);
             string fullPath = Path.GetDirectoryName(pathAndName);
             if (!Directory.Exists(fullPath))
@@ -76,6 +83,12 @@ namespace SmartVariables
 
         public override void LoadVariables()
         {
+            string pathToSave = "";
+            foreach (SmartString pathPart in PathToSave)
+            {
+                pathToSave = Path.Combine(pathToSave, pathPart.Value);
+            }
+            
             string pathAndName = Path.Combine(Application.persistentDataPath, pathToSave);
 
             FileStream file;

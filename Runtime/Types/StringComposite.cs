@@ -20,6 +20,7 @@ namespace SmartVariables
                     smartString.AddListener(OnStringChanged);
                 }
             }
+            OnStringChanged("", "");
         }
 
         private void OnDisable()
