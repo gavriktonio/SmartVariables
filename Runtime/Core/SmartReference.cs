@@ -211,9 +211,16 @@ namespace SmartVariables
                         VariableSaver.AddVariableToSaveQueue(this);
                     }
 
-                    if (listeners != null)
+                    try
                     {
-                        listeners.Invoke(oldValue, runtimeValue);
+                        if (listeners != null)
+                        {
+                            listeners.Invoke(oldValue, runtimeValue);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
                     }
 
                     settingInProgress = false;
