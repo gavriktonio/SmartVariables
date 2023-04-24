@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -16,6 +17,16 @@ namespace SmartVariables
         private Dictionary<int, object> cachedLoadedVariables = new Dictionary<int, object>();
 
         private bool loaded = false;
+
+        private void OnEnable()
+        {
+            loaded = false;
+        }
+
+        private void OnDisable()
+        {
+            loaded = false;
+        }
 
         public override object GetSavedVariableValue(int variableId)
         {
@@ -130,10 +141,12 @@ namespace SmartVariables
                     break;
                 }
 
-                cachedLoadedVariables.Add(deserializedId, deserializedObject);
+                cachedLoadedVariables[deserializedId] = deserializedObject;
             }
 
             file.Close();
+
+            Debug.Log("Loaded variables: " + name);
             loaded = true;
         }
     }

@@ -115,7 +115,7 @@ namespace SmartVariables
         {
             Logger.LogDebug("Running OnEnable for '{0}'...", name);
 
-#if !UNITY_EDITOR
+//#if !UNITY_EDITOR
             if (Persistent)
             {
                 if (VariableSaver != null)
@@ -134,7 +134,7 @@ namespace SmartVariables
 
                 Logger.LogWarning("Persistent value could not be loaded for '{0}', reset to initial value: '{1}'", name, Value);
             }
-#endif
+//#endif
         }
 
         //Gets called when a game starts, as well as when changing the value from the editor
