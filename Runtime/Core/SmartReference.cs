@@ -113,7 +113,8 @@ namespace SmartVariables
 
         void OnEnable()
         {
-            Logger.LogDebug("Running OnEnable for '{0}'...", name);
+            if (Logger.LogLevel >= LogLevel.Debug)
+                Logger.LogDebug("Running OnEnable for '{0}'...", name);
 
 //#if !UNITY_EDITOR
             if (Persistent)
@@ -125,14 +126,16 @@ namespace SmartVariables
                     {
                         SetRuntimeValueFromObject(savedValue);
 
-                        Logger.LogDebug("Value on '{0}' was set to '{1}' from persistent storage.", name, Value);
+                        if (Logger.LogLevel >= LogLevel.Debug)
+                            Logger.LogDebug("Value on '{0}' was set to '{1}' from persistent storage.", name, Value);
                         return;
                     }
                 }
                 //If can't find saved value, reset to initial
                 ResetRuntimeValue();
 
-                Logger.LogWarning("Persistent value could not be loaded for '{0}', reset to initial value: '{1}'", name, Value);
+                if (Logger.LogLevel >= LogLevel.Warning)
+                    Logger.LogWarning("Persistent value could not be loaded for '{0}', reset to initial value: '{1}'", name, Value);
             }
 //#endif
         }
@@ -192,12 +195,14 @@ namespace SmartVariables
 
                         setQueue.Enqueue(value);
                         lastQueued = value;
-                        Logger.LogDebug("{0} queued up a new value to set: '{1}'. Queue length: {2}", name, value == null ? "null" : value.ToString(), setQueue.Count);
+                        if (Logger.LogLevel >= LogLevel.Debug)
+                            Logger.LogDebug("{0} queued up a new value to set: '{1}'. Queue length: {2}", name, value == null ? "null" : value.ToString(), setQueue.Count);
 
                         return;
                     }
 
-                    Logger.Log("{0} is being set from '{1}' to '{2}'", name, runtimeValue, value == null ? "null" : value.ToString());
+                    if (Logger.LogLevel >= LogLevel.Info)
+                        Logger.Log("{0} is being set from '{1}' to '{2}'", name, runtimeValue, value == null ? "null" : value.ToString());
 
                     settingInProgress = true;
 
@@ -206,7 +211,8 @@ namespace SmartVariables
 
                     if (VariableSaver != null)
                     {
-                        Logger.LogDebug("{0} with value '{1}' is being queued to save with variable saver '{2}'.", name, value == null ? "null" : value.ToString(), VariableSaver.name);
+                        if (Logger.LogLevel >= LogLevel.Debug)
+                            Logger.LogDebug("{0} with value '{1}' is being queued to save with variable saver '{2}'.", name, value == null ? "null" : value.ToString(), VariableSaver.name);
 
                         VariableSaver.AddVariableToSaveQueue(this);
                     }
@@ -229,7 +235,8 @@ namespace SmartVariables
                     //If so, call the function recursively to set the queued up value
                     if (setQueue != null && setQueue.Count > 0)
                     {
-                        Logger.LogDebug("{0} dequeued a value: {1}", name, setQueue.Peek());
+                        if (Logger.LogLevel >= LogLevel.Debug)
+                            Logger.LogDebug("{0} dequeued a value: {1}", name, setQueue.Peek());
 
                         T newValue = setQueue.Dequeue();
                         this.Value = (newValue);
@@ -237,7 +244,8 @@ namespace SmartVariables
                 }
                 else
                 {
-                    Logger.LogWarning("{0} value set to {1} rejected. It's the same as the previous one. If callbacks should still work in this case, turn on the force callbacks option in the variable.",
+                    if (Logger.LogLevel >= LogLevel.Warning)
+                        Logger.LogWarning("{0} value set to {1} rejected. It's the same as the previous one. If callbacks should still work in this case, turn on the force callbacks option in the variable.",
                               name, value);
                 }
             }
@@ -301,28 +309,32 @@ namespace SmartVariables
 
         public override void ResetRuntimeValue()
         {
-            Logger.LogDebug("{0} ResetRuntimeValue", name);
+            if (Logger.LogLevel >= LogLevel.Debug)
+                Logger.LogDebug("{0} ResetRuntimeValue", name);
 
             runtimeValue = initialValue;
         }
 
         public void AddListener(VariableSetEvent listener)
         {
-            Logger.LogDebug("{0} AddListener", name);
+            if (Logger.LogLevel >= LogLevel.Debug)
+                Logger.LogDebug("{0} AddListener", name);
 
             listeners += listener;
         }
 
         public void RemoveListener(VariableSetEvent listener)
         {
-            Logger.LogDebug("{0} RemoveListener", name);
+            if (Logger.LogLevel >= LogLevel.Debug)
+                Logger.LogDebug("{0} RemoveListener", name);
 
             listeners -= listener;
         }
 
         public override void RemoveAllListeners()
         {
-            Logger.LogDebug("{0} RemoveAllListeners", name);
+            if (Logger.LogLevel >= LogLevel.Debug)
+                Logger.LogDebug("{0} RemoveAllListeners", name);
 
             if (listeners != null)
             {
