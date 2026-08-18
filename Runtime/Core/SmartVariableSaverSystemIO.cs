@@ -53,7 +53,7 @@ namespace SmartVariables
             //saved queued variables into loaded cache
             foreach (SmartReferenceBase var in queuedVariablesToSave)
             {
-                cachedLoadedVariables[var.GetInstanceID()] = var.GetValueAsObject();
+                cachedLoadedVariables[SmartObjectId.Get(var)] = var.GetValueAsObject();
             }
 
             queuedVariablesToSave.Clear();

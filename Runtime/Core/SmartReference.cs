@@ -121,7 +121,7 @@ namespace SmartVariables
             {
                 if (VariableSaver != null)
                 {
-                    object savedValue = VariableSaver.GetSavedVariableValue(GetInstanceID());
+                    object savedValue = VariableSaver.GetSavedVariableValue(SmartObjectId.Get(this));
                     if (savedValue != null)
                     {
                         SetRuntimeValueFromObject(savedValue);

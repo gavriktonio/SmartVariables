@@ -78,9 +78,9 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
 #elif UNITY_XBOXONE
         XboxOneSaver?.LoadVariables();
 #elif WINDOWS_UWP
-        return UWPSaver?.LoadVariables();
+        UWPSaver?.LoadVariables();
 #else
-        return FallbackSaver?.LoadVariables();
+        FallbackSaver?.LoadVariables();
 #endif
     }
 
@@ -109,9 +109,9 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
 #elif UNITY_XBOXONE
         XboxOneSaver?.SaveQueuedVariables();
 #elif WINDOWS_UWP
-        return UWPSaver?.SaveQueuedVariables();
+        UWPSaver?.SaveQueuedVariables();
 #else
-        return FallbackSaver?.SaveQueuedVariables();
+        FallbackSaver?.SaveQueuedVariables();
 #endif
     }
 
@@ -140,9 +140,9 @@ public class SmartVariableSaverSwitcherPerPlatform : SmartVariableSaverBase
 #elif UNITY_XBOXONE
         XboxOneSaver?.AddVariableToSaveQueue(variable);
 #elif WINDOWS_UWP
-        return UWPSaver?.AddVariableToSaveQueue(variable);
+        UWPSaver?.AddVariableToSaveQueue(variable);
 #else
-        return FallbackSaver?.AddVariableToSaveQueue(variable);
+        FallbackSaver?.AddVariableToSaveQueue(variable);
 #endif
     }
 }

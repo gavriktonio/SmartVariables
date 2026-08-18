@@ -29,7 +29,7 @@ namespace SmartVariables
 
         private void Awake()
         {
-            if (copyInstanceID != GetInstanceID())
+            if (copyInstanceID != SmartObjectId.Get(this))
             {
                 DeepCopy();
             }
@@ -37,7 +37,7 @@ namespace SmartVariables
 
         private void OnValidate()
         {
-            if (copyInstanceID != GetInstanceID())
+            if (copyInstanceID != SmartObjectId.Get(this))
             {
                 DeepCopy();
             }
@@ -61,7 +61,7 @@ namespace SmartVariables
                 variables[i] = DeepCopy(variables[i], components);
             }
 
-            copyInstanceID = GetInstanceID();
+            copyInstanceID = SmartObjectId.Get(this);
         }
 
         private SmartReferenceBase DeepCopy(SmartReferenceBase variable, List<Component> components)
