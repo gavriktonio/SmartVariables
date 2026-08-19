@@ -3,11 +3,16 @@ using UnityEngine;
 using System.Reflection;
 using System;
 using System.Collections.Generic;
+#if UNITY_6000_3_OR_NEWER
+using ProjectBrowserDropTargetId = UnityEngine.EntityId;
+#else
+using ProjectBrowserDropTargetId = System.Int32;
+#endif
 
 [InitializeOnLoad]
 class ProjectBrowserDragAndDrop
 {
-    public delegate DragAndDropVisualMode ProjectBrowserDropHandler(int draggedUponId, string draggedUponPath, bool perform);
+    public delegate DragAndDropVisualMode ProjectBrowserDropHandler(ProjectBrowserDropTargetId draggedUponId, string draggedUponPath, bool perform);
 
     public static void AddDragAndDropHandler(ProjectBrowserDropHandler dropHandler)
     {
@@ -36,6 +41,9 @@ class ProjectBrowserDragAndDrop
 
     static ProjectBrowserDragAndDrop()
     {
+#if UNITY_6000_3_OR_NEWER
+        DragAndDrop.AddDropHandlerV2(CustomProjectBrowserDropHandler);
+#else
         //Assign a custom drop handler delegate
         Type projectBrowserDropHandler = dragAndDropServiceType.GetNestedType("ProjectBrowserDropHandler");
 
@@ -44,9 +52,10 @@ class ProjectBrowserDragAndDrop
 
         MethodInfo methodInfo = dragAndDropServiceType.GetMethod("AddDropHandler", new Type[] { projectBrowserDropHandler });
         methodInfo.Invoke(null, new object[] { delegateTest });
+#endif
     }
 
-    internal static DragAndDropVisualMode CustomProjectBrowserDropHandler(int dragUponInstanceId, string dummy, bool perform)
+    internal static DragAndDropVisualMode CustomProjectBrowserDropHandler(ProjectBrowserDropTargetId dragUponInstanceId, string dummy, bool perform)
     {
         DragAndDropVisualMode returnMode = DragAndDropVisualMode.None;
         foreach (ProjectBrowserDropHandler handler in customDragAndDropHandlers)
@@ -63,8 +72,10 @@ class ProjectBrowserDragAndDrop
 
         if (returnMode == DragAndDropVisualMode.None)
         {
+#if !UNITY_6000_3_OR_NEWER
             if (defaultDragDropMethod != null)
                 return (DragAndDropVisualMode)defaultDragDropMethod.Invoke(null, new object[] { dragUponInstanceId, dummy, perform });
+#endif
         }
 
         return returnMode;

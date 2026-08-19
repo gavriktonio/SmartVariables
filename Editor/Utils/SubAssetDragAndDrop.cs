@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEditor;
 using System.Linq;
 using System;
+#if UNITY_6000_3_OR_NEWER
+using ProjectBrowserDropTargetId = UnityEngine.EntityId;
+#else
+using ProjectBrowserDropTargetId = System.Int32;
+#endif
 
 [InitializeOnLoad]
 public class SubAssetDragAndDrop
@@ -13,7 +18,7 @@ public class SubAssetDragAndDrop
         ProjectBrowserDragAndDrop.AddDragAndDropHandler(CustomProjectBrowserDropHandler);
     }
 
-    internal static DragAndDropVisualMode CustomProjectBrowserDropHandler(int draggedUponID, string draggedUponPath, bool perform)
+    internal static DragAndDropVisualMode CustomProjectBrowserDropHandler(ProjectBrowserDropTargetId draggedUponID, string draggedUponPath, bool perform)
     {
         Type draggedOntoAssetType = AssetDatabase.GetMainAssetTypeAtPath(draggedUponPath);
         SubAssetCollection collectionAttribute = null;
