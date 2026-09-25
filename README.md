@@ -14,3 +14,5 @@ The system is being used in and developed alongside [Jello](https://gavriktonio.
 Samples are available through the package manager
 
 For explanation of the system go to https://gavriktonio.com/smartvars
+
+When an enum value changes, Enable Based on Smart Enum disables every listed object outside the new value before enabling any object in the new value. Shared objects remain active. If an activation callback changes the enum again, the component applies the latest value before enabling targets from the old transition.

@@ -164,16 +164,25 @@ namespace SmartVariables
                 }
             }
 
-            // Evaluate membership across all lists before applying, so list order cannot
-            // disable an object shared with the current option.
+            // Disable every departing target before enabling any arriving target. Activation
+            // callbacks can register new owners that require the old owners to be gone first.
             foreach (GameObject target in managedObjects)
             {
-                if (target != null)
-                {
-                    bool active = enabledObjects.Contains(target);
-                    if (target.activeSelf != active)
-                        target.SetActive(active);
-                }
+                if (target != null && !enabledObjects.Contains(target) && target.activeSelf)
+                    target.SetActive(false);
+            }
+
+            // A callback may change the enum while targets are being disabled. Let the queued
+            // apply select the new value instead of enabling targets from this stale snapshot.
+            if (applyPending || !isActiveAndEnabled || subscribedReference == null)
+                return;
+
+            foreach (GameObject target in enabledObjects)
+            {
+                if (applyPending || !isActiveAndEnabled || subscribedReference == null)
+                    return;
+                if (target != null && !target.activeSelf)
+                    target.SetActive(true);
             }
         }
     }
